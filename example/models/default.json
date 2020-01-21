@@ -1,0 +1,117 @@
+{
+    "name": "Default model",
+    "models": [
+        {
+            "name": "ModelName",
+            "generator": "random(edge_coverage(100) && vertex_coverage(100))",
+            "actions": [
+                "counter = 0;"
+            ],
+            "startElementId": "v0",
+            "vertices": [
+                {
+                    "id": "v0",
+                    "name": "vertex_A"
+                },
+                {
+                    "id": "v1",
+                    "name": "vertex_B"
+                },
+                {
+                    "id": "v2",
+                    "name": "vertex_C"
+                },
+                {
+                    "id": "v3",
+                    "name": "vertex_D"
+                },
+                {
+                    "id": "v4",
+                    "name": "vertex_E"
+                },
+                {
+                    "id": "v5",
+                    "name": "vertex_F"
+                },
+                {
+                    "id": "v6",
+                    "name": "vertex_G"
+                }
+            ],
+            "edges": [
+                {
+                    "id": "e0",
+                    "name": "edge_A",
+                    "actions": [
+                        "counter++;"
+                    ],
+                    "sourceVertexId": "v0",
+                    "targetVertexId": "v1"
+                },
+                {
+                    "id": "e1",
+                    "name": "edge_B",
+                    "actions": [
+                        "counter++;"
+                    ],
+                    "sourceVertexId": "v1",
+                    "targetVertexId": "v2"
+                },
+                {
+                    "id": "e2",
+                    "name": "edge_C",
+                    "actions": [
+                        "counter++;"
+                    ],
+                    "sourceVertexId": "v2",
+                    "targetVertexId": "v3"
+                },
+                {
+                    "id": "e3",
+                    "name": "edge_D",
+                    "actions": [
+                        "counter++;"
+                    ],
+                    "sourceVertexId": "v3",
+                    "targetVertexId": "v4"
+                },
+                {
+                    "id": "e4",
+                    "name": "edge_E",
+                    "actions": [
+                        "counter++;"
+                    ],
+                    "sourceVertexId": "v4",
+                    "targetVertexId": "v0"
+                },
+                {
+                    "id": "e5",
+                    "name": "edge_F",
+                    "actions": [
+                        "counter++;"
+                    ],
+                    "sourceVertexId": "v0",
+                    "targetVertexId": "v5"
+                },
+                {
+                    "id": "e6",
+                    "name": "edge_G",
+                    "actions": [
+                        "counter++;"
+                    ],
+                    "sourceVertexId": "v5",
+                    "targetVertexId": "v6"
+                },
+                {
+                    "id": "e7",
+                    "name": "edge_H",
+                    "actions": [
+                        "counter++;"
+                    ],
+                    "sourceVertexId": "v6",
+                    "targetVertexId": "v0"
+                }
+            ]
+        }
+    ]
+}

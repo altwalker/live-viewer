@@ -1,0 +1,31 @@
+.h-full {
+    height: calc(100vh - .6750rem - 1rem - 30px);
+}
+
+input:focus,
+textarea:focus {
+    border-color: #18AD38 !important;
+    box-shadow: none !important;
+}
+
+#current-step-form input,
+#current-step-form textarea {
+    color: #18AD38 !important;
+}
+
+.bg-transparent-black {
+    background-color: rgba(0, 0, 0, 0.85);
+}
+
+.z-index-3 {
+    z-index: 3;
+}
+
+.overflow-y-scroll {
+    overflow-y: scroll;
+}
+
+.btn-primary {
+    border-color: #18AD38 !important;
+    background-color: #18AD38 !important;
+}

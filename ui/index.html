@@ -1,0 +1,232 @@
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+
+    <title>Live Viewer: A live-viewer for an AltWalker test run.</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <!-- Model-Visualizer CSS -->
+    <link rel="stylesheet" href="https://altom.gitlab.io/altwalker/model-visualizer/model-visualizer.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/models.css">
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <nav class="navbar navbar-light bg-white border-bottom">
+      <a class="navbar-brand" href="#">
+        <img src="img/logo.svg" width="30" height="30" class="d-inline-block align-top mx-1" alt="" />
+        Live Viewer
+      </a>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-9 h-full p-0">
+          <div id="visualizer"></div>
+        </div>
+
+        <div class="col-3 h-full bg-light py-3 border-left overflow-y-scroll">
+          <div id="current-step-form" class="">
+            <h5 class="text-uppercase text-muted mb-3">Current Step</h5>
+
+            <form>
+              <div class="form-group">
+                <label for="name-input">Name:</label>
+                <input class="form-control" id="name-input" placeholder="Placeholder Name" readonly>
+              </div>
+              <div class="form-group">
+                <label for="id-input">Id:</label>
+                <input class="form-control" id="id-input" placeholder="Placeholder Id" readonly>
+              </div>
+              <div class="form-group">
+                <label for="model-input">Model:</label>
+                <input class="form-control" id="model-input" placeholder="Placeholder Model" readonly>
+              </div>
+
+              <div class="w-100 my-4 border-bottom"></div>
+
+              <div class="form-group">
+                <label for="data-input">Data:</label>
+                <textarea class="form-control" id="data-input" rows="10"  placeholder="{}" readonly></textarea>
+              </div>
+            </form>
+          </div>
+
+          <div id="statistics-form" class="d-none">
+            <h5 class="text-uppercase text-muted mb-3">Statistics</h5>
+
+            <div class="statistics-group">
+              <h6 class="text-uppercase text-muted mb-3">General</h6>
+
+              <div>
+                <span class="pr-1">Status:</span>
+                <span id="statistics-status">None</span>
+              </div>
+
+              <div class="w-100 my-4 border-bottom"></div>
+            </div>
+
+            <div class="statistics-group">
+              <h6 class="text-uppercase text-muted mb-3">Models</h6>
+
+              <div class="py-1">
+                <span class="pr-1">Number of Models:</span>
+                <span id="statistics-number-of-models">None</span>
+              </div>
+
+              <div class="py-1">
+                <span class="pr-1">Completed Models:</span>
+                <span id="statistics-completed-models">None</span>
+              </div>
+
+              <div class="py-1">
+                <span class="pr-1">Failed Models:</span>
+                <span id="statistics-failed-models">None</span>
+              </div>
+
+              <div class="py-1">
+                <span class="pr-1">Incomplete Models:</span>
+                <span id="statistics-incomplete-models">None</span>
+              </div>
+
+              <div class="py-1">
+                <span class="pr-1">Not Executed Models:</span>
+                <span id="statistics-not-executed-models">None</span>
+              </div>
+
+              <div class="w-100 my-4 border-bottom"></div>
+            </div>
+
+            <div class="statistics-group">
+              <h6 class="text-uppercase text-muted mb-3">Edges</h6>
+
+              <div class="py-1">
+                <span class="pr-1">Edge Coverage:</span>
+                <span id="statistics-edge-coverage">None</span>
+              </div>
+
+              <div class="py-1">
+                <span class="pr-1">Number of Edges:</span>
+                <span id="statistics-number-of-edges">None</span>
+              </div>
+
+              <div class="py-1">
+                <span class="pr-1">Visited Edges:</span>
+                <span id="statistics-visited-edges">None</span>
+              </div>
+
+              <div class="py-1">
+                <span class="pr-1">Unvisited Edges:</span>
+                <span id="statistics-unvisited-edges">None</span>
+              </div>
+
+              <div class="w-100 my-4 border-bottom"></div>
+            </div>
+
+            <div class="statistics-group">
+              <h6 class="text-uppercase text-muted mb-3">Vertices</h6>
+
+              <div class="py-1">
+                <span class="pr-1">Vertex Coverage:</span>
+                <span id="statistics-vertex-coverage">None</span>
+              </div>
+
+              <div class="py-1">
+                <span class="pr-1">Number of Vertices:</span>
+                <span id="statistics-number-of-vertices">None</span>
+              </div>
+
+              <div class="py-1">
+                <span class="pr-1">Visited Vertices:</span>
+                <span id="statistics-visited-vertices">None</span>
+              </div>
+
+              <div class="py-1">
+                <span class="pr-1">Unvisited Vertices:</span>
+                <span id="statistics-unvisited-vertices">None</span>
+              </div>
+
+              <div class="w-100 my-4 border-bottom"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="setup-overlay" class="container-fluid z-index-3 fixed-top h-100 bg-transparent-black">
+      <div class="row">
+        <div class="col-6 offset-3 py-3">
+          <div class="card">
+            <div class="card-header">
+              Setup
+            </div>
+
+            <div class="card-body">
+              <h5 class="card-title">Websocket Setup</h5>
+
+              <div id="error-alert" class="alert alert-danger fade d-none" role="alert">
+                <strong>Connection Error:</strong>
+                <span id="error-message">Chould not connect to port: 9999. <br> Make sure the websocket server is running on the selected port.</span>
+              </div>
+
+              <div id="warning-alert" class="alert alert-warning fade d-none" role="alert">
+                <strong>Connection Error:</strong>
+                <span id="warning-message">Chould not connect to port: 9999. <br> Make sure the websocket server is running on the selected port.</span>
+              </div>
+
+              <form>
+                <div class="form-group">
+                  <label for="port-input">Port:</label>
+                  <input type="number" min=0 max=65535 class="form-control" placeholder="Websokcet Port" id="port-input" required>
+                  <div class="invalid-feedback">
+                    Please input the port used by the websocket server.
+                  </div>
+                </div>
+                <div class="form-group form-check">
+                  <input type="checkbox" class="form-check-input" id="autoplay-checkbox">
+                  <label class="form-check-label" for="autoplay-checkbox">Autoplay</label>
+                </div>
+                <button type="button" onclick="connectToWebsocket()" class="btn btn-primary">Start</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="settigns-overlay" class="container-fluid z-index-3 fixed-top h-100 bg-transparent-black d-none">
+
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    <!-- DagreD3 and D3 -->
+    <script src="https://d3js.org/d3.v5.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dagre-d3/0.6.3/dagre-d3.min.js"></script>
+
+    <!-- VueJS -->
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+    <!-- lodash -->
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
+
+    <!-- Model-Visualizer CSS -->
+    <script src="https://altom.gitlab.io/altwalker/model-visualizer/model-visualizer.js"></script>
+
+    <!-- Custom Scripts -->
+    <script type="text/javascript" src="js/models.js"></script>
+    <script type="text/javascript" src="js/script.js"></script>
+  </body>
+</html>

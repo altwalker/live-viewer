@@ -1,0 +1,62 @@
+/* Nodes */
+
+.mv-visualizer .node > rect,
+.mv-visualizer .node-fake > rect,
+.mv-visualizer .node-blocked > rect {
+    fill: #196DB6;
+    fill: #7f8c8d;
+    stroke: #196DB6;
+    stroke: #7f8c8d;
+    rx: 1;
+    ry: 1;
+}
+
+.mv-visualizer .node-label {
+    fill: #ecf0f1;
+    font-size: 1.2em;
+    font-weight: 400;
+}
+
+.mv-visualizer .node-start > rect {
+    fill: #1b9e77;
+    stroke: #1b9e77;
+}
+
+.mv-visualizer .node-fake {
+    fill: #ecf0f1;
+}
+
+.mv-visualizer .node-blocked {
+    font-weight: 400;
+}
+
+/* Edges */
+
+.mv-visualizer .edgeLabels {
+    font-size: 1.2em;
+    font-weight: 400;
+}
+
+.mv-visualizer .edgePath path {
+    stroke: #999;
+    fill: #999;
+    stroke-width: 2.5px;
+}
+
+/* Current Element */
+
+.currentNode rect {
+    stroke-width: 4px;
+}
+
+.currentNode text {
+    font-weight: 600;
+}
+
+.currentEdge path {
+    stroke-width: 4px;
+}
+
+.currentLabel {
+    font-weight: 600;
+}
