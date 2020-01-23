@@ -11,19 +11,19 @@ A live viewer for an AltWalker test run.
 
 Clone the repo:
 
-```
+```bash
 $ git clone git@gitlab.com:altom/altwalker/live-viewer.git
 ```
 
 Install the command line tool:
 
-```
+```bash
 $ pip install --editable .
 ```
 
 Now if the cli was installed correctly you can type:
 
-```
+```bash
 $ live-viewer --version
 ```
 
@@ -47,19 +47,19 @@ The viewer server command shares the arguments and options with `altwalker onlin
 
 To start the websocket server:
 
-```
+```bash
 $ live-viewer server path/to/tests/ -m path/to/model.json "generator(stop_condition)" -x [python|dotnet]
 ```
 
 Example:
 
-```
+```bash
 $ live-viewer server tests -m models/default.json "random(never)"
 ```
 
 After you start the webscoket server you need to start a webserver.
 
-```
+```bash
 $ live-viewer open
 ```
 
@@ -82,16 +82,18 @@ Use:
 
 * `-h`, `--help`: Show a help message and exit.
 
-```
+```bash
 $ live-viewer --help
 ```
 
-```
+```bash
 $ live-viewer server --help
 ```
 
-```
+```bash
 $ live-viewer open --help
 ```
 
 ### Websocket
+
+### Develop
