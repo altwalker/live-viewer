@@ -41,9 +41,9 @@ Prerequisites:
 * tesc code for the model(s)
 
 > Note:
-> If you can run your tests using `altwalker online` you have everything you need for the viewer.
+> If you can run your tests using `altwalker online` you have everything you need for the LiveViewer.
 
-The viewer server command shares the arguments and options with `altwalker online`, with the exception that `-p` will set the websocket port and `--graphwalker-port` will set the port for the GraphWalker service.
+The `live-viewer server` command shares the arguments and options with `altwalker online`, with the exception that `-p` will set the websocket port and `--graphwalker-port` will set the port for the GraphWalker service.
 
 To start the websocket server:
 
@@ -69,7 +69,7 @@ Or open the file from `viewer/ui/index.html`.
 
 ## Troubleshooting
 
-If you have troubles runnig the viewer make sure that your models and code are valid.
+If you have troubles runnig the LiveViewer make sure that your models and code are valid.
 
 Use:
 
