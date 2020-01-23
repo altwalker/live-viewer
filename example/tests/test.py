@@ -1,47 +1,58 @@
+import string
+import random
+
+
+def genreate_random_message(length=30):
+    letters = string.ascii_lowercase
+    return ''.join(random.choice(letters) for _ in range(length))
+
 
 class ModelName:
 
-	def edge_A(self):
-		pass
+    def edge_A(self):
+        print(genreate_random_message())
 
-	def edge_B(self):
-		pass
+    def edge_B(self):
+        print(genreate_random_message())
 
-	def edge_C(self):
-		pass
+    def edge_C(self):
+        print(genreate_random_message())
 
-	def edge_D(self):
-		pass
+    def edge_D(self):
+        print(genreate_random_message())
 
-	def edge_E(self):
-		pass
+    def edge_E(self):
+        print(genreate_random_message())
 
-	def edge_F(self):
-		pass
+    def edge_F(self):
+        print(genreate_random_message())
 
-	def edge_G(self):
-		pass
+    def edge_G(self):
+        print(genreate_random_message())
 
-	def edge_H(self):
-		pass
+    def edge_H(self):
+        print(genreate_random_message())
 
-	def vertex_A(self):
-		pass
+    def vertex_A(self):
+        print(genreate_random_message())
 
-	def vertex_B(self):
-		pass
+    def vertex_B(self):
+        print(genreate_random_message())
 
-	def vertex_C(self):
-		pass
+    def vertex_C(self):
+        print(genreate_random_message())
 
-	def vertex_D(self):
-		pass
+    def vertex_D(self):
+        print(genreate_random_message())
 
-	def vertex_E(self):
-		pass
+        if random.randint(0, 10) > 8:
+            raise Exception(genreate_random_message())
 
-	def vertex_F(self):
-		pass
+    def vertex_E(self):
+        print(genreate_random_message())
 
-	def vertex_G(self):
-		pass
+    def vertex_F(self):
+        print(genreate_random_message())
+
+    def vertex_G(self):
+        print(genreate_random_message())

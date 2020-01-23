@@ -45,18 +45,19 @@
 
 /* Current Element */
 
-.currentNode rect {
-    stroke-width: 4px;
+.current-node rect {
+    stroke: #34495e !important;
+    stroke-width: 1px !important;
 }
 
-.currentNode text {
-    font-weight: 600;
+.current-node text {
+    font-weight: 500 !important;
 }
 
-.currentEdge path {
-    stroke-width: 4px;
+.current-edge path {
+    /* stroke-width: 3px !important; */
 }
 
-.currentLabel {
-    font-weight: 600;
+.current-label {
+    font-weight: 600 !important;
 }

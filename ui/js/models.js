@@ -40,8 +40,17 @@ function updateStep(step) {
       .classed("current-edge", true);
 
     // Bold edges labels
-    d3.selectAll("svg .edgeLabels tspan").attr("class", (d) => d.name == id ? "currentLabel" : "");
+    d3.selectAll("svg .edgeLabels tspan").attr("class", (d) => d.name == id ? "current-label" : "");
   }
 
   oldStepId = id;
+}
+
+function updateFailedStep(step) {
+  d3.select("svg g#" + step.id + " rect")
+    .style("fill", "#c0392b")
+    .style("stroke", "#c0392b");
+
+  d3.select("svg g#" + step.id + " path")
+    .style("stroke", "#c0392b")
 }

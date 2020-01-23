@@ -2,6 +2,7 @@ import functools
 import asyncio
 import json
 import traceback
+import concurrent.futures
 
 import click
 import websockets
@@ -23,28 +24,44 @@ def _create_reporter(websocket):
     return reporter
 
 
+async def get_json(websocket):
+    message = await websocket.recv()
+    return json.loads(message)
+
+
 async def walk(websocket, path, models, tests, executor_type, url, graphwalker_port, delay):
     click.secho("Client connected...", fg='green', bold=True)
     planner = None
     executor = None
 
+    first_time = True
+    autoplay = (await get_json(websocket)).get("autoplay", False)
+
     try:
         models_json = get_models([model for model, _ in models])
-        await websocket.send(json.dumps({"models": models_json}))
 
-        planner = create_planner(models=models, port=graphwalker_port)
+        planner = create_planner(models=models, port=graphwalker_port, verbose=True)
         executor = create_executor(tests, executor_type, url)
         reporter = _create_reporter(websocket)
 
         walker = create_walker(planner, executor, reporter=reporter)
 
-        for step in walker:
-            step["data"] = planner.get_data()
+        while first_time or autoplay:
+            first_time = False
+            await websocket.send(json.dumps({"models": models_json}))
 
-            await asyncio.sleep(delay)
-            await websocket.send(json.dumps({"step": step}))
+            for step in walker:
+                step["data"] = planner.get_data()
 
-        await websocket.send(json.dumps({"staitstics": planner.get_statistics()}))
+                await asyncio.sleep(0)
+                await asyncio.sleep(delay)
+
+            statistics = planner.get_statistics()
+            statistics["status"] = walker.status
+
+            await websocket.send(json.dumps({"statistics": statistics}))
+            autoplay = (await get_json(websocket)).get("autoplay", False)
+
         planner.kill()
     except Exception as error:
         click.secho("\nError: ", fg="red", bold=True, nl=False)

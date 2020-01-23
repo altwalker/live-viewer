@@ -3,14 +3,41 @@
 }
 
 input:focus,
-textarea:focus {
+textarea:focus,
+select:focus {
     border-color: #18AD38 !important;
     box-shadow: none !important;
 }
 
+#error-form input:focus,
+#error-form textarea:focus {
+    border-color: #dc3545 !important;
+    box-shadow: none !important;
+}
+
+#error-form input,
+#error-form textarea {
+    color: #dc3545 !important;
+}
+
 #current-step-form input,
-#current-step-form textarea {
+#current-step-form textarea,
+#output-form textarea {
     color: #18AD38 !important;
+}
+
+#statistics-status,
+#statistics-vertex-coverage,
+#statistics-edge-coverage {
+    font-size: 1em;
+}
+
+.nav-icon {
+    stroke: #18AD38 !important;
+}
+
+.cursor-pointer {
+    cursor: pointer !important;
 }
 
 .bg-transparent-black {
