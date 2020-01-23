@@ -65,7 +65,7 @@ $ live-viewer open
 
 Now visit: http://localhost:8000/.
 
-Or open the file from `viewer/ui/index.html`.
+Or open the file from `live-viewer/ui/index.html`.
 
 ## Troubleshooting
 
