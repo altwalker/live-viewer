@@ -13,6 +13,7 @@ Clone the repo:
 
 ```bash
 $ git clone git@gitlab.com:altom/altwalker/live-viewer.git
+$ cd live-viewer
 ```
 
 Install the command line tool:
@@ -73,8 +74,8 @@ If you have troubles runnig the LiveViewer make sure that your models and code a
 
 Use:
 
-* `altwalker check` for the model(s).
-* `altwalker verify` for code.
+* `altwalker check` - for the model(s).
+* `altwalker verify` - for code.
 
 ## Documentation
 

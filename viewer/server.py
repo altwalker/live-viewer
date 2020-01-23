@@ -13,7 +13,7 @@ from altwalker.model import get_models
 from altwalker.reporter import ClickReporter, Reporting
 from altwalker.walker import create_walker
 
-from server.reporter import WebsocketReporter
+from .reporter import WebsocketReporter
 
 
 def _create_reporter(websocket):

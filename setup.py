@@ -8,10 +8,10 @@ with open('requirements.txt') as f:
 setup(
     name='live-viewer',
     version='0.1.0',
-    py_modules=['server'],
+    py_modules=['viewer'],
     install_requires=REQUIRED,
     entry_points='''
         [console_scripts]
-        live-viewer=server.cli:cli
+        viewer=viewer.cli:cli
     ''',
 )
