@@ -314,6 +314,6 @@ function connectToWebsocket() {
   }
 }
 
-window.onload = () => {
+window.onload = function() {
   window.addEventListener("resize", repaintGraph);
 }
