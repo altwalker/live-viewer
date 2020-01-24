@@ -173,7 +173,6 @@ function hideStopControlls() {
   controls.classList.add("d-none");
 }
 
-
 function startCountDown(delay) {
   showAutoplayControls();
   document.getElementById("autoplay-seconds").innerText = currentDelay;
@@ -218,6 +217,22 @@ function resetError() {
 
 function resetOutput() {
   document.getElementById("output-input").value = "";
+}
+
+function saveSettings() {
+  const graphDirection = document.getElementById("graph-direction-input").value;
+  const vertexSeparation = document.getElementById("vertex-separation-input").value;
+  const edgeSeparation = document.getElementById("edge-separation-input").value;
+  const rankSeparation = document.getElementById("rank-separation-input").value;
+
+  setGraphLayoutOptions({
+    "graphDirection": graphDirection,
+    "vertexSeparation": vertexSeparation == 0 ? 50 : vertexSeparation,
+    "edgeSeparation": edgeSeparation == 0 ? 50 : edgeSeparation,
+    "rankSeparation": rankSeparation == 0 ? 50 : rankSeparation,
+  });
+
+  hideSettingsOvarlay();
 }
 
 function connectToWebsocket() {

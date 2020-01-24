@@ -18,6 +18,26 @@ function displayModels(models) {
   count = {}
 }
 
+function setGraphLayoutOptions(options) {
+  console.log(options);
+
+  const graphDirectionsMap = {
+    "Top-Bottom": "TB",
+    "Bottom-Top": "BT",
+    "Left-Right": "LR",
+    "Right-Left": "RL"
+  }
+
+  const layoutOptions = {
+    "rankdir": graphDirectionsMap[options["graphDirection"]],
+    "nodesep": options["vertexSeparation"],
+    "edgesep": options["edgeSeparation"],
+    "ranksep": options["rankSeparation"]
+  }
+
+  visualizer.setGraphLayoutOptions(layoutOptions);
+}
+
 function repaintGraph() {
   visualizer.repaint();
 
