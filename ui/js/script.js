@@ -161,6 +161,19 @@ function hideAutoplayControls() {
   controls.classList.add("d-none");
 }
 
+function showStopControlls() {
+  let controls = document.getElementById("stop-controls");
+  controls.classList.add("d-inline-block");
+  controls.classList.remove("d-none");
+}
+
+function hideStopControlls() {
+  let controls = document.getElementById("stop-controls");
+  controls.classList.remove("d-inline-block");
+  controls.classList.add("d-none");
+}
+
+
 function startCountDown(delay) {
   showAutoplayControls();
   document.getElementById("autoplay-seconds").innerText = currentDelay;
@@ -189,6 +202,13 @@ function skipCountDown() {
 function stopAutoplay() {
   autoplay = false;
   currentDelay = 0;
+}
+
+function stopRun() {
+  hideStopControlls();
+
+  ws.send(JSON.stringify({"autoplay": autoplay}));
+  ws.close();
 }
 
 function resetError() {
@@ -268,6 +288,8 @@ function connectToWebsocket() {
         updateStatistics(message.statistics);
         if (autoplay) {
           startCountDown(maxDelay);
+        } else {
+          showStopControlls();
         }
       }
     }
@@ -278,4 +300,5 @@ function connectToWebsocket() {
 }
 
 window.onload = () => {
+  window.addEventListener("resize", repaintGraph);
 }
