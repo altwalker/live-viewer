@@ -12,6 +12,6 @@ setup(
     install_requires=REQUIRED,
     entry_points='''
         [console_scripts]
-        viewer=viewer.cli:cli
+        live-viewer=viewer.cli:cli
     ''',
 )

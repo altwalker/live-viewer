@@ -95,15 +95,18 @@ function updateStepStart(step) {
   document.getElementById("name-input").value = step.name;
   document.getElementById("model-input").value = step.modelName;
 
-  document.getElementById("data-input").value = JSON.stringify(step.data, null, '  ');
+  if (step.data) {
+    document.getElementById("data-input").value = JSON.stringify(step.data, null, '  ');
+  }
 }
 
 function updateStepEnd(result) {
   let outputTextArea = document.getElementById("output-input");
   let autorscroll = document.getElementById("autoscroll-checkbox").checked;
 
+  outputTextArea.value += result.output;
+
   if (autorscroll) {
-    outputTextArea.value += result.output;
     outputTextArea.scrollTop = outputTextArea.scrollHeight;
   }
 

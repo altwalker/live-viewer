@@ -58,11 +58,14 @@
 
         <div class="container-fluid">
             <div class="row">
-                <div class="col-9 h-full p-0">
+                <div id="left" class="h-full p-0">
                     <div id="visualizer"></div>
                 </div>
 
-                <div class="col-3 h-full bg-light py-3 border-left overflow-y-scroll">
+                <div id="dragbar" class="h-full">
+                </div>
+
+                <div id="right" class="h-full bg-light px-3 py-3 border-left overflow-y-scroll">
                     <div id="current-step-form" class="">
                         <form>
                             <h5 class="text-uppercase text-muted mb-3">Current Step</h5>
@@ -356,5 +359,6 @@
         <!-- Custom Scripts -->
         <script type="text/javascript" src="js/models.js"></script>
         <script type="text/javascript" src="js/script.js"></script>
+        <script type="text/javascript" src="js/rezise.js"></script>
     </body>
 </html>

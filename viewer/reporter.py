@@ -10,17 +10,18 @@ from altwalker.reporter import Reporter
 class WebsocketReporter(Reporter):
     """This reporter sends the report through a websocket."""
 
-    def __init__(self, websocket, delay=0.5):
+    def __init__(self, websocket):
         self.websocket = websocket
-        self.delay = delay
 
     def step_start(self, step):
         asyncio.ensure_future(self.websocket.send(json.dumps({"step": step})))
-        time.sleep(self.delay)
 
     def step_end(self, step, result):
-        result["id"] = step["id"]
-        result["output"] = "[{}] {}.{} - {}".format(datetime.datetime.now(), step["name"], step["modelName"], result["output"])
+        result["id"] = step.get("id", None)
+
+        if step.get("modelName", None):
+            result["output"] = "[{}] {}.{}:\n{}".format(datetime.datetime.now(), step["modelName"], step["name"], result["output"])
+        else:
+            result["output"] = "[{}] {}\n{}".format(datetime.datetime.now(), step["name"], result["output"])
 
         asyncio.ensure_future(self.websocket.send(json.dumps({"result": result})))
-        time.sleep(self.delay)

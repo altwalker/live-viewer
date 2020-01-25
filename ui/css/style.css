@@ -56,3 +56,20 @@ select:focus {
     border-color: #18AD38 !important;
     background-color: #18AD38 !important;
 }
+
+/* Resizable containers  */
+
+#left {
+    width: calc(70% - 0.025%);
+}
+
+#right {
+    width: calc(30% - 0.025%);
+}
+
+#dragbar {
+    width: 0.05%;
+    cursor: col-resize;
+
+    background-color: #dee2e6;
+}
