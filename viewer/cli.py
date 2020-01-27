@@ -33,7 +33,7 @@ def cli():
 def server(tests, models, executor, url, port, graphwalker_port, delay):
     """Starts the websocket server."""
 
-    click.secho("Starting the websocket server...", fg='green', bold=True)
+    click.secho("Starting the websocket server on port: {}".format(port), fg='green', bold=True)
     click.secho("Waiting for a client to connect...", fg='green', bold=True)
 
     start(models, tests, executor, port=port, graphwalker_port=graphwalker_port, delay=delay)
@@ -47,8 +47,9 @@ def open():
     click.secho("Visit: ", fg='green', bold=True, nl=False)
     click.echo("http://localhost:8000")
 
+    path = pathlib.Path(__file__).parent
     view_path = pathlib.Path("../ui/")
-    os.chdir(view_path)
+    os.chdir(path.joinpath(view_path).resolve())
 
     server_address = ('', 8000)
     httpd = http.server.HTTPServer(server_address, http.server.CGIHTTPRequestHandler)
