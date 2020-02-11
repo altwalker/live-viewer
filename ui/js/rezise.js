@@ -19,8 +19,11 @@ function dragmove(event) {
 }
 
 function dragend() {
+  if (dragging) {
+    repaintGraph();
+  }
+
   dragging = false;
-  repaintGraph();
 }
 
 window.onload = function() {

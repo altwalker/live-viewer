@@ -317,6 +317,6 @@ function connectToWebsocket() {
   }
 }
 
-window.onload = function() {
-  window.addEventListener("resize", repaintGraph);
-}
+window.addEventListener("resize", function(event) {
+  repaintGraph()
+});
