@@ -29,8 +29,8 @@ async def get_json(websocket):
     return json.loads(message)
 
 
-async def walk(websocket, path, models, tests, executor_type, url, graphwalker_port, delay):
-    click.secho("Client connected...", fg='green', bold=True)
+async def walk(websocket, path, tests, models, executor_type, url=None, steps=None, graphwalker_port=None, start_element=None, unvisited=False, blocked=False, delay=0.5):
+    click.secho("Client connected.\n", fg='green', bold=True)
     planner = None
     executor = None
 
@@ -40,8 +40,9 @@ async def walk(websocket, path, models, tests, executor_type, url, graphwalker_p
     try:
         models_json = get_models([model for model, _ in models])
 
-        planner = create_planner(models=models, port=graphwalker_port, verbose=True)
-        executor = create_executor(tests, executor_type, url)
+        planner = create_planner(models=models, steps=steps, port=graphwalker_port, start_element=start_element,
+                                 verbose=True, unvisited=unvisited, blocked=blocked)
+        executor = create_executor(tests, executor_type, url=url)
         reporter = _create_reporter(websocket)
 
         walker = create_walker(planner, executor, reporter=reporter)
@@ -50,20 +51,23 @@ async def walk(websocket, path, models, tests, executor_type, url, graphwalker_p
             first_time = False
             await websocket.send(json.dumps({"models": models_json}))
 
-            for step in walker:
-                step["data"] = planner.get_data()
-
-                await asyncio.sleep(0)
+            for _ in walker:
+                await asyncio.sleep(delay)
+                planner.get_data()
                 await asyncio.sleep(delay)
 
             statistics = planner.get_statistics()
             statistics["status"] = walker.status
 
             await websocket.send(json.dumps({"statistics": statistics}))
+            click.secho("Test run ended.")
             autoplay = (await get_json(websocket)).get("autoplay", False)
 
         planner.kill()
+
     except Exception as error:
+        click.secho("Test run ended with an error.")
+
         click.secho("\nError: ", fg="red", bold=True, nl=False)
         click.secho(str(error), fg="red")
 
@@ -76,9 +80,12 @@ async def walk(websocket, path, models, tests, executor_type, url, graphwalker_p
         if executor:
             executor.kill()
 
+    click.secho("Client disconected.", fg="yellow")
+    click.secho("Waiting for a new client to connect...", fg="green")
 
-def start(models, tests, executor="python", url="http://localhost:5000/", port=5555, graphwalker_port=9000, delay=0.5):
-    bound_walk = functools.partial(walk, models=models, tests=tests, executor_type=executor, url=url, graphwalker_port=graphwalker_port, delay=delay)
+
+def start(models, tests, steps=None, executor="python", url="http://localhost:5000/", port=5555, graphwalker_port=9000, delay=0.5):
+    bound_walk = functools.partial(walk, tests=tests, models=models, executor_type=executor, url=url, steps=steps, graphwalker_port=graphwalker_port, start_element=None, unvisited=False, blocked=False, delay=delay)
     start_server = websockets.serve(bound_walk, 'localhost', port)
 
     asyncio.get_event_loop().run_until_complete(start_server)
