@@ -1,0 +1,112 @@
+[
+    {
+        "id": "v0",
+        "modelName": "ModelName",
+        "name": "vertex_A"
+    },
+    {
+        "actions": [
+            {
+                "Action": "counter++;"
+            }
+        ],
+        "id": "e5",
+        "modelName": "ModelName",
+        "name": "edge_F"
+    },
+    {
+        "id": "v5",
+        "modelName": "ModelName",
+        "name": "vertex_F"
+    },
+    {
+        "actions": [
+            {
+                "Action": "counter++;"
+            }
+        ],
+        "id": "e6",
+        "modelName": "ModelName",
+        "name": "edge_G"
+    },
+    {
+        "id": "v6",
+        "modelName": "ModelName",
+        "name": "vertex_G"
+    },
+    {
+        "actions": [
+            {
+                "Action": "counter++;"
+            }
+        ],
+        "id": "e7",
+        "modelName": "ModelName",
+        "name": "edge_H"
+    },
+    {
+        "id": "v0",
+        "modelName": "ModelName",
+        "name": "vertex_A"
+    },
+    {
+        "actions": [
+            {
+                "Action": "counter++;"
+            }
+        ],
+        "id": "e0",
+        "modelName": "ModelName",
+        "name": "edge_A"
+    },
+    {
+        "id": "v1",
+        "modelName": "ModelName",
+        "name": "vertex_B"
+    },
+    {
+        "actions": [
+            {
+                "Action": "counter++;"
+            }
+        ],
+        "id": "e1",
+        "modelName": "ModelName",
+        "name": "edge_B"
+    },
+    {
+        "id": "v2",
+        "modelName": "ModelName",
+        "name": "vertex_C"
+    },
+    {
+        "actions": [
+            {
+                "Action": "counter++;"
+            }
+        ],
+        "id": "e2",
+        "modelName": "ModelName",
+        "name": "edge_C"
+    },
+    {
+        "id": "v3",
+        "modelName": "ModelName",
+        "name": "vertex_D"
+    },
+    {
+        "actions": [
+            {
+                "Action": "counter++;"
+            }
+        ],
+        "id": "e3",
+        "modelName": "ModelName",
+        "name": "edge_D"
+    },
+    {
+        "id": "v4",
+        "modelName": "ModelName",
+        "name": "vertex_E"
+    }
+]
