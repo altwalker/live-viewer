@@ -31,7 +31,7 @@ $ live-viewer --version
 And you should see:
 
 ```
-LiveViewer, version 0.1
+live-viewer, version 0.1.0
 ```
 
 ## Running
