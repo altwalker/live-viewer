@@ -58,7 +58,7 @@ Example:
 $ live-viewer server tests -m models/default.json "random(never)"
 ```
 
-After you start the webscoket server you need to start a webserver.
+After you start the webscoket server you need to start a webserver (the webserver will serve the LiveViewer frontend).
 
 ```bash
 $ live-viewer open
@@ -95,6 +95,3 @@ $ live-viewer server --help
 $ live-viewer open --help
 ```
 
-### Websocket
-
-### Develop
