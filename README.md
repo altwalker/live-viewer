@@ -44,18 +44,18 @@ Prerequisites:
 > Note:
 > If you can run your tests using `altwalker online` you have everything you need for the LiveViewer.
 
-The `live-viewer server` command shares the arguments and options with `altwalker online`, with the exception that `-p` will set the websocket port and `--graphwalker-port` will set the port for the GraphWalker service.
+The `live-viewer online` command shares the arguments and options with `altwalker online`, with the exception that `-p` will set the websocket port and `--graphwalker-port` will set the port for the GraphWalker service.
 
 To start the websocket server:
 
 ```bash
-$ live-viewer server path/to/tests/ -m path/to/model.json "generator(stop_condition)" -x [python|dotnet]
+$ live-viewer online path/to/tests/ -m path/to/model.json "generator(stop_condition)" -x [python|dotnet]
 ```
 
 Example:
 
 ```bash
-$ live-viewer server tests -m models/default.json "random(never)"
+$ live-viewer online tests -m models/default.json "random(never)"
 ```
 
 After you start the webscoket server you need to start a webserver (the webserver will serve the LiveViewer frontend).
@@ -88,7 +88,7 @@ $ live-viewer --help
 ```
 
 ```bash
-$ live-viewer server --help
+$ live-viewer online --help
 ```
 
 ```bash
