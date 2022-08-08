@@ -39,7 +39,7 @@ LiveViewer, version 0.1
 Prerequisites:
 
 * model(s)
-* tesc code for the model(s)
+* test code for the model(s)
 
 > Note:
 > If you can run your tests using `altwalker online` you have everything you need for the LiveViewer.
