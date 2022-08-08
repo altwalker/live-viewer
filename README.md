@@ -70,12 +70,12 @@ Or open the file from `live-viewer/ui/index.html`.
 
 ## Troubleshooting
 
-If you have troubles runnig the LiveViewer make sure that your models and code are valid.
+1. If you have troubles runnig the LiveViewer make sure that your models and code are valid. Ues: 
 
-Use:
+    * `altwalker check` - for the model(s).
+    * `altwalker verify` - for code.
 
-* `altwalker check` - for the model(s).
-* `altwalker verify` - for code.
+2. If you have trouble running the `live-viewer online` command make sure there are no GraphWalker processes running. 
 
 ## Documentation
 
