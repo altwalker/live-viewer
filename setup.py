@@ -1,5 +1,7 @@
 from setuptools import setup
 
+from viewer.__version__ import VERSION
+
 
 with open('requirements.txt') as f:
     REQUIRED = f.read().splitlines()
@@ -7,7 +9,7 @@ with open('requirements.txt') as f:
 
 setup(
     name='live-viewer',
-    version='0.1.0',
+    version=VERSION,
     py_modules=['viewer'],
     install_requires=REQUIRED,
     entry_points='''

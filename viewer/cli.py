@@ -6,6 +6,7 @@ import http.server
 
 import click
 
+from .__version__ import VERSION
 from .server import start
 
 
@@ -22,7 +23,7 @@ warnings.formatwarning = click_formatwarning
 
 
 @click.group(context_settings=CONTEXT_SETTINGS)
-@click.version_option(None ,"-v", "--version", prog_name="LiveViewer")
+@click.version_option(VERSION ,"-v", "--version", prog_name="live-viewer")
 def cli():
     """A command line tool for starting the live viewer."""
 
