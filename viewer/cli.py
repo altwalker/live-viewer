@@ -86,7 +86,7 @@ def walk(tests, models, steps_path, executor, url, port, delay):
 def server(tests, models, executor, url, port, graphwalker_port, delay):
     """Starts the websocket server."""
 
-    warnings.warn("Depracated use `online` command instead.", UserWarning)
+    warnings.warn("Depracated use the `online` command instead.", UserWarning)
 
     start_server(tests, models, executor=executor, port=port, graphwalker_port=graphwalker_port, delay=delay, steps=None)
 
