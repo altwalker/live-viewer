@@ -41,7 +41,7 @@ Prerequisites:
 * model(s)
 * test code for the model(s)
 
-> Note:
+> **Note:**
 > If you can run your tests using `altwalker online` you have everything you need for the LiveViewer.
 
 The `live-viewer online` command shares the arguments and options with `altwalker online`, with the exception that `-p` will set the websocket port and `--graphwalker-port` will set the port for the GraphWalker service.
