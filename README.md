@@ -6,13 +6,13 @@ A live viewer for an AltWalker test run.
 
 ## Setup
 
-> Note: You need to have AltWalker installed to use the LiveViewer.
-> You can read the installig documentation [here](https://altom.gitlab.io/altwalker/altwalker/).
+> **Note**: You need to have AltWalker installed to use the LiveViewer.
+> You can read the installing documentation [here](https://altwalker.github.io/altwalker/).
 
 Clone the repo:
 
 ```bash
-$ git clone git@gitlab.com:altom/altwalker/live-viewer.git
+$ git clone https://github.com/altwalker/live-viewer.git
 $ cd live-viewer
 ```
 
@@ -22,7 +22,7 @@ Install the command line tool:
 $ pip install --editable .
 ```
 
-Now if the cli was installed correctly you can type:
+Now if the CLI was installed correctly you can type:
 
 ```bash
 $ live-viewer --version
@@ -58,7 +58,7 @@ Example:
 $ live-viewer online tests -m models/default.json "random(never)"
 ```
 
-After you start the webscoket server you need to start a webserver (the webserver will serve the LiveViewer frontend).
+After you start the websocket server you need to start a webserver (the webserver will serve the LiveViewer frontend).
 
 ```bash
 $ live-viewer open
@@ -70,12 +70,12 @@ Or open the file from `live-viewer/ui/index.html`.
 
 ## Troubleshooting
 
-1. If you have troubles runnig the LiveViewer make sure that your models and code are valid. Ues: 
+1. If you have troubles running the LiveViewer make sure that your models and code are valid. Ues:
 
     * `altwalker check` - for the model(s).
     * `altwalker verify` - for code.
 
-2. If you have trouble running the `live-viewer online` command make sure there are no GraphWalker processes running. 
+2. If you have trouble running the `live-viewer online` command make sure there are no GraphWalker processes running.
 
 ## Documentation
 
@@ -94,4 +94,3 @@ $ live-viewer online --help
 ```bash
 $ live-viewer open --help
 ```
-
