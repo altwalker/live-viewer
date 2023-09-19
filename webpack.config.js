@@ -1,7 +1,12 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require('path')
+
+const title = 'AltWalker\'s Live Viewer: A real-time viewer for AltWalker test runs.'
+const description = ''
+const keywords = 'altwalker, model-based-testing, testing'
+const url = 'https://altwalker.github.io/live-viewer/'
+const image = 'https://raw.githubusercontent.com/altwalker/live-viewer/main/img/screenshot.png'
 
 let config = {
   target: 'web',
@@ -24,25 +29,20 @@ let config = {
       template: './src/index.html',
       favicon: './src/favicon.ico',
       meta: {
-        'description': { name: 'description', content: '...' },
-        'keyword': { name: 'keywords', content: '...' },
-        'og:title': { property: 'og:title', content: '...' },
-        'og:description': { property: 'og:description', content: '...' },
+        'description': { name: 'description', content: description },
+        'keyword': { name: 'keywords', content: keywords },
+        'og:title': { property: 'og:title', content: title },
+        'og:description': { property: 'og:description', content: description },
         'og:type': { property: 'og:type', content: 'website' },
-        'og:url': { property: 'og:url', content: '...' },
-        'og:image': { property: 'og:image', content: '...' },
+        'og:url': { property: 'og:url', content: url },
+        'og:image': { property: 'og:image', content: image },
         'twitter:card': { name: 'twitter:card', content: 'summary_large_image' },
-        'twitter:title': { name: 'twitter:title', content: '...' },
-        'twitter:description': { name: 'twitter:description', content: '...' },
-        'twitter:image': { name: 'twitter:image', content: '...' }
+        'twitter:title': { name: 'twitter:title', content: title },
+        'twitter:description': { name: 'twitter:description', content: description },
+        'twitter:image': { name: 'twitter:image', content: image }
       }
     }),
     new MiniCssExtractPlugin(),
-    // new CopyPlugin({
-    //   patterns: [
-    //     { from: "./src/*.png", to: "[name].[ext]" },
-    //   ],
-    // }),
   ],
 }
 
