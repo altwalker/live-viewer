@@ -4,7 +4,7 @@ const WorkboxPlugin = require('workbox-webpack-plugin');
 const path = require('path')
 
 const title = 'AltWalker\'s Live Viewer: A real-time viewer for AltWalker test runs.'
-const description = ''
+const description = 'This application provides real-time visualization for your AltWalker test runs, allowing you to gain deeper insights into test execution, track progress, and identify potential issues with ease.'
 const keywords = 'altwalker, model-based-testing, testing'
 const url = 'https://altwalker.github.io/live-viewer/'
 const image = 'https://raw.githubusercontent.com/altwalker/live-viewer/main/img/meta.png'
