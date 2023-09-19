@@ -1,4 +1,5 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require("copy-webpack-plugin");
 const path = require('path')
 
 let config = {
@@ -18,7 +19,16 @@ let config = {
     ]
   },
   plugins: [
-    new HtmlWebpackPlugin({ template: './src/index.html', favicon: './src/favicon.ico' })
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+      favicon: './src/favicon.ico',
+      meta: {}
+    }),
+    new CopyPlugin({
+      patterns: [
+        { from: "./src/*.png", to: "[name].[ext]" },
+      ],
+    }),
   ],
 }
 
