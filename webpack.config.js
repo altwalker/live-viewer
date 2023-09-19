@@ -7,7 +7,7 @@ const title = 'AltWalker\'s Live Viewer: A real-time viewer for AltWalker test r
 const description = ''
 const keywords = 'altwalker, model-based-testing, testing'
 const url = 'https://altwalker.github.io/live-viewer/'
-const image = 'https://raw.githubusercontent.com/altwalker/live-viewer/main/img/screenshot.png'
+const image = 'https://raw.githubusercontent.com/altwalker/live-viewer/main/img/meta.png'
 
 let config = {
   target: 'web',
