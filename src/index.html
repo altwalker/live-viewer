@@ -35,22 +35,22 @@
                         <span id="autoplay-seconds">5</span> seconds...
                     </span>
 
-                    <a onclick="stopAutoplay()" data-toggle="tooltip" data-placement="bottom" title="Stop" class="cursor-pointer">
+                    <a id="stop-button" data-toggle="tooltip" data-placement="bottom" title="Stop" class="cursor-pointer">
                         <img src="img/square.svg" width="20" height="20" class="mx-1" alt="stop" />
                     </a>
-                    <a onclick="skipCountDown()" data-toggle="tooltip" data-placement="bottom" title="Skip" class="cursor-pointer">
+                    <a id="skip-button" data-toggle="tooltip" data-placement="bottom" title="Skip" class="cursor-pointer">
                         <img src="img/skip-forward.svg" width="20" height="20" class="mx-1" alt="skip forward" />
                     </a>
                 </div>
 
                 <div id="stop-controls" class="d-none mb-0 mx-3 px-3 border-right">
-                    <a onclick="stopRun()" data-toggle="tooltip" data-placement="bottom" title="Stop" class="cursor-pointer">
+                    <a id="stop-button" data-toggle="tooltip" data-placement="bottom" title="Stop" class="cursor-pointer">
                         <img src="img/square.svg" width="20" height="20" class="mx-1" alt="stop" />
                     </a>
                 </div>
 
                 <div class="d-inline-block mb-0">
-                    <a onclick="showSettingsOvarlay()" data-toggle="tooltip" data-placement="bottom" title="Settings" class="cursor-pointer">
+                    <a id="settings-button" data-toggle="tooltip" data-placement="bottom" title="Settings" class="cursor-pointer">
                         <img src="img/settings.svg" width="20" height="20" class="mx-1" alt="settings" />
                     </a>
                 </div>
@@ -242,18 +242,18 @@
 
                             <div id="error-alert" class="alert alert-danger fade d-none" role="alert">
                                 <strong>Connection Error:</strong>
-                                <span id="error-message">Chould not connect to port: 9999. <br> Make sure the websocket server is running on the selected port.</span>
+                                <span id="error-message">Could not connect to port: 9999. <br> Make sure the websocket server is running on the selected port.</span>
                             </div>
 
                             <div id="warning-alert" class="alert alert-warning fade d-none" role="alert">
                                 <strong>Connection Error:</strong>
-                                <span id="warning-message">Chould not connect to port: 9999. <br> Make sure the websocket server is running on the selected port.</span>
+                                <span id="warning-message">Could not connect to port: 9999. <br> Make sure the websocket server is running on the selected port.</span>
                             </div>
 
                             <form>
                                 <div class="form-group">
                                     <label for="port-input">Port:</label>
-                                    <input type="number" min=0 max=65535 value=5555 class="form-control" placeholder="Websokcet Port" id="port-input" required>
+                                    <input type="number" min=0 max=65535 value=5555 class="form-control" placeholder="Websocket Port" id="port-input" required>
                                     <div class="invalid-feedback">
                                         Please input the port used by the websocket server.
                                     </div>
@@ -264,7 +264,7 @@
                                     <label class="form-check-label" for="autoplay-checkbox">Autoplay</label>
                                 </div>
 
-                                <button type="button" onclick="connectToWebsocket()" class="btn btn-primary">
+                                <button type="button" id="connect-button" class="btn btn-primary">
                                     <span id="start-button-loading" class="d-none">
                                         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                         Loading...
@@ -324,8 +324,8 @@
                                     </div>
                                 </div>
 
-                                <button type="button" onclick="saveSettings()" class="btn btn-primary mr-2 my-2">Save</button>
-                                <button type="button" onclick="hideSettingsOvarlay()" class="btn btn-danger ml-2 my-2">Close</button>
+                                <button type="button" id="save-settings-button" class="btn btn-primary mr-2 my-2">Save</button>
+                                <button type="button" id="hide-settings-button" class="btn btn-danger ml-2 my-2">Close</button>
                             </form>
                         </div>
                     </div>
@@ -356,10 +356,5 @@
 
         <!-- Model-Visualizer CSS -->
         <script src="https://altwalker.github.io/model-visualizer/build/model-visualizer.js"></script>
-
-        <!-- Custom Scripts -->
-        <script type="text/javascript" src="js/models.js"></script>
-        <script type="text/javascript" src="js/script.js"></script>
-        <script type="text/javascript" src="js/rezise.js"></script>
     </body>
 </html>
