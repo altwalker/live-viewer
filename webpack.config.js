@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const WorkboxPlugin = require('workbox-webpack-plugin');
 const path = require('path')
 
 const title = 'AltWalker\'s Live Viewer: A real-time viewer for AltWalker test runs.'
@@ -43,6 +44,10 @@ let config = {
       }
     }),
     new MiniCssExtractPlugin(),
+    new WorkboxPlugin.GenerateSW({
+      clientsClaim: true,
+      skipWaiting: true,
+    }),
   ],
 }
 
