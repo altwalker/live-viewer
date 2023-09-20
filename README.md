@@ -5,7 +5,7 @@ A web application for visualizing the progress of an AltWalker test run.
 AltWalker's LiveViewer is a powerful tool designed to enhance your experience with AltWalker. This application provides real-time visualization and monitoring capabilities for your AltWalker test runs, allowing you to gain deeper insights into test execution, track progress, and identify potential issues with ease. With AltWalker's LiveViewer, you can effortlessly keep an eye on the execution of
 your test models and ensure the success of your testing endeavors.
 
-![Screenshot](img/screenshot.png)
+![Screenshot](https://raw.githubusercontent.com/altwalker/live-viewer/main/img/screenshot.png)
 
 ## Setup
 
