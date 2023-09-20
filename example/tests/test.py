@@ -1,6 +1,6 @@
-import time
-import string
 import random
+import string
+import time
 
 
 def generate_random_message(length=30):
