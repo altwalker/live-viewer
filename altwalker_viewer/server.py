@@ -1,16 +1,14 @@
+import asyncio
 import atexit
 import functools
-import asyncio
 import json
 import traceback
-import concurrent.futures
 
 import click
 import websockets
-from altwalker.exceptions import AltWalkerException
-from altwalker.planner import create_planner
 from altwalker.executor import create_executor
 from altwalker.model import get_models
+from altwalker.planner import create_planner
 from altwalker.reporter import ClickReporter, Reporting
 from altwalker.walker import create_walker
 
@@ -44,7 +42,7 @@ async def get_json(websocket):
     return json.loads(message)
 
 
-async def walk(websocket, path, tests, models, executor_type, url=None, steps=None, graphwalker_port=None, start_element=None, unvisited=False, blocked=False, delay=0.5):
+async def walk(websocket, tests, models, executor_type, url=None, steps=None, graphwalker_port=None, start_element=None, unvisited=False, blocked=False, delay=0.5):
     click.secho("Client connected.\n", fg='green', bold=True)
     planner = None
     executor = None

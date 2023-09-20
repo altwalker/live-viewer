@@ -1,14 +1,13 @@
-import os
+import http.server
 import json
+import os
 import pathlib
 import warnings
-import http.server
 
 import click
 
 from .__version__ import VERSION
 from .server import start
-
 
 CONTEXT_SETTINGS = dict(help_option_names=["--help", "-h"])
 
@@ -67,32 +66,11 @@ def walk(tests, models, steps_path, executor, url, port, delay):
         steps = json.load(f)
 
     models = [(model, "") for model in models]
-    start_server(tests, models=models, executor=executor, port=port, graphwalker_port=None, delay=delay, steps=steps)
-
-
-@cli.command()
-@click.argument("tests", type=click.Path(exists=True))
-@click.option("--model", "-m", "models",
-    type=(click.Path(exists=True, dir_okay=False), str), required=True, multiple=True,
-    help="The model, as a graphml/json file followed by generator with stop condition.")
-@click.option("--executor", "-x", "--language", "-l", "executor", type=click.Choice(["python", "c#", "dotnet", "http"]),
-              default="python", show_default=True,
-              help="Configure the executor to be used.")
-@click.option("--url", default="http://localhost:5000/", show_default=True,
-              help="The url for the executor.")
-@click.option("--port", "-p", default=5555, help="Sets the port of the websocket service.", show_default=True)
-@click.option("--graphwalker-port", default=9000, help="Sets the port fo the graphwalker service.", show_default=True)
-@click.option("--delay", "-d", default=0.5, help="Sets a delay between steps. (in seconds)", show_default=True)
-def server(tests, models, executor, url, port, graphwalker_port, delay):
-    """Starts the websocket server."""
-
-    warnings.warn("Depracated use the `online` command instead.", UserWarning)
-
-    start_server(tests, models, executor=executor, port=port, graphwalker_port=graphwalker_port, delay=delay, steps=None)
+    start_server(tests, models=models, executor=executor, url=url, port=port, graphwalker_port=None, delay=delay, steps=steps)
 
 
 @cli.command("open")
-def _open():
+def open_frontend():
     """Starts a web server for the html page."""
 
     click.secho("Starting the web server...", fg='green', bold=True)

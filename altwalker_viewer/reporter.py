@@ -1,8 +1,6 @@
-import time
-import json
 import asyncio
 import datetime
-import functools
+import json
 
 from altwalker.reporter import Reporter
 
@@ -15,7 +13,6 @@ class WebsocketReporter(Reporter):
 
     def step_start(self, step):
         asyncio.ensure_future(self.websocket.send(json.dumps({"step": step})))
-        # asyncio.ensure_future(asyncio.sleep(0))
 
     def step_end(self, step, result):
         result["id"] = step.get("id", None)
@@ -26,4 +23,3 @@ class WebsocketReporter(Reporter):
             result["output"] = "[{}] {}\n{}".format(datetime.datetime.now(), step["name"], result["output"])
 
         asyncio.ensure_future(self.websocket.send(json.dumps({"result": result})))
-        # asyncio.ensure_future(asyncio.sleep(0))
