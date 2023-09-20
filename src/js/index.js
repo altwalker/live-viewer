@@ -477,13 +477,13 @@ window.addEventListener("resize", function(event) {
 });
 
 document.addEventListener("DOMContentLoaded", function() {
-  document.getElementById("stop-button").addEventListener("click", function(event) {
+  document.getElementById("stop-autoplay-button").addEventListener("click", function(event) {
     stopAutoplay();
   });
   document.getElementById("skip-button").addEventListener("click", function(event) {
     skipCountDown();
   });
-  document.getElementById("stop-button").addEventListener("click", function(event) {
+  document.getElementById("stop-run-button").addEventListener("click", function(event) {
     stopRun();
   });
 

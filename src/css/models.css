@@ -3,9 +3,7 @@
 .mv-visualizer .node > rect,
 .mv-visualizer .node-fake > rect,
 .mv-visualizer .node-blocked > rect {
-    fill: #196DB6;
     fill: #7f8c8d;
-    stroke: #196DB6;
     stroke: #7f8c8d;
     rx: 1;
     ry: 1;
@@ -54,9 +52,9 @@
     font-weight: 500 !important;
 }
 
-.current-edge path {
-    /* stroke-width: 3px !important; */
-}
+/* .current-edge path {
+    stroke-width: 3px !important;
+} */
 
 .current-label {
     font-weight: 600 !important;

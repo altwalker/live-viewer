@@ -1,0 +1,39 @@
+name: Test
+
+on: push
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Lint Code Base
+        uses: super-linter/super-linter@v5
+        env:
+          VALIDATE_CSS: false
+          VALIDATE_PYTHON_BLACK: false
+          VALIDATE_PYTHON_MYPY: false
+          VALIDATE_JSCPD: false
+          VALIDATE_JAVASCRIPT_STANDARD: false
+          DEFAULT_BRANCH: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  functional:
+    runs-on: 'ubuntu-latest'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install altwalker-viewer
+        run: |
+          pip install -e .
+
+      - name: Check altwalker-viewer version
+        run:
+          altwalker-viewer --version

@@ -20,7 +20,7 @@
         <nav class="navbar navbar-light bg-white border-bottom">
             <a class="navbar-brand" href="#">
                 <img src="img/logo.svg" width="30" height="30" class="d-inline-block align-top mx-1" alt="logo" />
-                Live Viewer
+                AltWalker's Live Viewer
             </a>
             <div>
                 <div id="autoplay-controls" class="d-none mb-0 mx-3 px-3 border-right">
@@ -29,7 +29,7 @@
                         <span id="autoplay-seconds">5</span> seconds...
                     </span>
 
-                    <a id="stop-button" data-toggle="tooltip" data-placement="bottom" title="Stop" class="cursor-pointer">
+                    <a id="stop-autoplay-button" data-toggle="tooltip" data-placement="bottom" title="Stop" class="cursor-pointer">
                         <img src="img/square.svg" width="20" height="20" class="mx-1" alt="stop" />
                     </a>
                     <a id="skip-button" data-toggle="tooltip" data-placement="bottom" title="Skip" class="cursor-pointer">
@@ -38,7 +38,7 @@
                 </div>
 
                 <div id="stop-controls" class="d-none mb-0 mx-3 px-3 border-right">
-                    <a id="stop-button" data-toggle="tooltip" data-placement="bottom" title="Stop" class="cursor-pointer">
+                    <a id="stop-run-button" data-toggle="tooltip" data-placement="bottom" title="Stop" class="cursor-pointer">
                         <img src="img/square.svg" width="20" height="20" class="mx-1" alt="stop" />
                     </a>
                 </div>
@@ -247,7 +247,7 @@
                             <form>
                                 <div class="form-group">
                                     <label for="port-input">Port:</label>
-                                    <input type="number" min=0 max=65535 value=5555 class="form-control" placeholder="Websocket Port" id="port-input" required>
+                                    <input type="number" min="0" max="65535" value="5555" class="form-control" placeholder="Websocket Port" id="port-input" required>
                                     <div class="invalid-feedback">
                                         Please input the port used by the websocket server.
                                     </div>
@@ -255,7 +255,7 @@
 
                                 <div class="form-group form-check">
                                     <input type="checkbox" class="form-check-input" id="autoplay-checkbox">
-                                    <label class="form-check-label" for="autoplay-checkbox">Autoplay</label>
+                                    <label class="form-check-label" for="autoplay-checkbox">Auto-replay</label>
                                 </div>
 
                                 <button type="button" id="connect-button" class="btn btn-primary">
@@ -296,7 +296,7 @@
 
                                 <div class="form-group">
                                     <label for="vertex-separation-input">Vertex Separation:</label>
-                                    <input type="number" min=0 max=500 class="form-control" placeholder="0" id="vertex-separation-input" required>
+                                    <input type="number" min="0" max="500" class="form-control" placeholder="0" id="vertex-separation-input" required>
                                     <div class="invalid-feedback">
                                         Please input the port used by the websocket server.
                                     </div>
@@ -304,7 +304,7 @@
 
                                 <div class="form-group">
                                     <label for="edge-separation-input">Edge Separation:</label>
-                                    <input type="number" min=0 max=500 class="form-control" placeholder="0" id="edge-separation-input" required>
+                                    <input type="number" min="0" max="500" class="form-control" placeholder="0" id="edge-separation-input" required>
                                     <div class="invalid-feedback">
                                         Please input the port used by the websocket server.
                                     </div>
@@ -312,7 +312,7 @@
 
                                 <div class="form-group">
                                     <label for="rank-separation-input">Rank Separation:</label>
-                                    <input type="number" min=0 max=500 class="form-control" placeholder="0" id="rank-separation-input" required>
+                                    <input type="number" min="0" max="500" class="form-control" placeholder="0" id="rank-separation-input" required>
                                     <div class="invalid-feedback">
                                         Please input the port used by the websocket server.
                                     </div>
