@@ -1,3 +1,4 @@
+import atexit
 import functools
 import asyncio
 import json
@@ -14,6 +15,20 @@ from altwalker.reporter import ClickReporter, Reporting
 from altwalker.walker import create_walker
 
 from .reporter import WebsocketReporter
+
+
+def kill_planner(planner):
+    click.secho("Kill planner.")
+
+    if planner:
+        planner.kill()
+
+
+def kill_executor(executor):
+    click.secho("Kill executor.")
+
+    if executor:
+        executor.kill()
 
 
 def _create_reporter(websocket):
@@ -42,7 +57,11 @@ async def walk(websocket, path, tests, models, executor_type, url=None, steps=No
 
         planner = create_planner(models=models, steps=steps, port=graphwalker_port, start_element=start_element,
                                  verbose=True, unvisited=unvisited, blocked=blocked)
+        atexit.register(kill_planner, planner)
+
         executor = create_executor(tests, executor_type, url=url)
+        atexit.register(kill_executor, executor)
+
         reporter = _create_reporter(websocket)
 
         walker = create_walker(planner, executor, reporter=reporter)
@@ -62,9 +81,6 @@ async def walk(websocket, path, tests, models, executor_type, url=None, steps=No
             await websocket.send(json.dumps({"statistics": statistics}))
             click.secho("Test run ended.")
             autoplay = (await get_json(websocket)).get("autoplay", False)
-
-        planner.kill()
-
     except Exception as error:
         click.secho("Test run ended with an error.")
 
@@ -74,13 +90,7 @@ async def walk(websocket, path, tests, models, executor_type, url=None, steps=No
         click.echo()
         click.secho(traceback.format_exc(), fg="red")
 
-        if planner:
-            planner.kill()
-
-        if executor:
-            executor.kill()
-
-    click.secho("Client disconected.", fg="yellow")
+    click.secho("Client disconnected.", fg="yellow")
     click.secho("Waiting for a new client to connect...", fg="green")
 
 
