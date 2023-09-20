@@ -98,8 +98,8 @@ def start(models, tests, steps=None, executor="python", url="http://localhost:50
           delay=0.5):
 
     bound_walk = functools.partial(walk, tests=tests, models=models, executor_type=executor, url=url, steps=steps,
-                                   graphwalker_port=graphwalker_port, start_element=None, unvisited=False, blocked=False,
-                                   delay=delay)
+                                   graphwalker_port=graphwalker_port, start_element=None, unvisited=False,
+                                   blocked=False, delay=delay)
     start_server = websockets.serve(bound_walk, 'localhost', port)
 
     asyncio.get_event_loop().run_until_complete(start_server)

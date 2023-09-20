@@ -1,6 +1,6 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const WorkboxPlugin = require('workbox-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const WorkboxPlugin = require('workbox-webpack-plugin')
 const path = require('path')
 
 const title = 'AltWalker\'s Live Viewer: A real-time viewer for AltWalker test runs.'
@@ -9,7 +9,7 @@ const keywords = 'altwalker, model-based-testing, testing'
 const url = 'https://altwalker.github.io/live-viewer/'
 const image = 'https://raw.githubusercontent.com/altwalker/live-viewer/main/img/meta.png'
 
-let config = {
+const config = {
   target: 'web',
   entry: './src/app.js',
   output: {
@@ -17,12 +17,12 @@ let config = {
     path: path.resolve(__dirname, 'viewer/dist')
   },
   devServer: {
-    static: './dist',
+    static: './dist'
   },
   module: {
     rules: [
       { test: /\.html$/i, loader: 'html-loader' },
-      { test: /\.css$/, use: [ MiniCssExtractPlugin.loader, 'css-loader' ] },
+      { test: /\.css$/, use: [ MiniCssExtractPlugin.loader, 'css-loader' ] }
     ]
   },
   plugins: [
@@ -46,15 +46,15 @@ let config = {
     new MiniCssExtractPlugin(),
     new WorkboxPlugin.GenerateSW({
       clientsClaim: true,
-      skipWaiting: true,
-    }),
-  ],
+      skipWaiting: true
+    })
+  ]
 }
 
-module.exports = function(env, argv) {
+module.exports = function (env, argv) {
   if (argv.mode === 'development') {
-    config.devtool = 'inline-source-map';
+    config.devtool = 'inline-source-map'
   }
 
-  return config;
+  return config
 }

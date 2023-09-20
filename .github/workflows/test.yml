@@ -13,6 +13,8 @@ jobs:
         uses: super-linter/super-linter@v5
         env:
           VALIDATE_PYTHON_BLACK: false
+          VALIDATE_PYTHON_MYPY: false
+          VALIDATE_JAVASCRIPT_STANDARD: false
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

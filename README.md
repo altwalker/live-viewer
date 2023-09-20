@@ -11,22 +11,22 @@ AltWalker's LiveViewer is a powerful tool designed to enhance your experience wi
 > **Note**: You need to have AltWalker installed to use the LiveViewer.
 > You can read the installing documentation [here](https://altwalker.github.io/altwalker/).
 
-Install the command line tool:
+Install the command-line tool:
 
 ```bash
-$ pip install altwalker-live-viewer
+pip install altwalker-live-viewer
 ```
 
 Now if the CLI was installed correctly you can type:
 
 ```bash
-$ live-viewer --version
+altwalker-viewer --version
 ```
 
 And you should see:
 
 ```
-live-viewer, version 0.1.0
+altwalker-viewer, version 0.4s.0
 ```
 
 ## Running
@@ -39,29 +39,27 @@ Prerequisites:
 > **Note**:
 > If you can run your tests using `altwalker online` you have everything you need for the LiveViewer.
 
-The `live-viewer online` command shares the arguments and options with `altwalker online`, with the exception that `-p` will set the websocket port and `--graphwalker-port` will set the port for the GraphWalker service.
+The `altwalker-viewer online` command shares the arguments and options with `altwalker online`, with the exception that `-p` will set the websocket.
 
 To start the websocket server:
 
 ```bash
-$ live-viewer online path/to/tests/ -m path/to/model.json "generator(stop_condition)" -x [python|dotnet]
+altwalker-viewer online path/to/tests/ -m path/to/model.json "generator(stop_condition)" -x [python|dotnet]
 ```
 
 Example:
 
 ```bash
-$ live-viewer online tests -m models/default.json "random(never)"
+altwalker-viewer online tests -m models/default.json "random(never)"
 ```
 
 After you start the websocket server you need to start a WebServer (the WebServer will serve the LiveViewer frontend).
 
 ```bash
-$ live-viewer open
+altwalker-viewer open
 ```
 
-Now visit: http://localhost:8000/.
-
-Or open the file from `live-viewer/ui/index.html`.
+Now visit: <http://localhost:8000/>.
 
 ## Troubleshooting
 
@@ -79,48 +77,48 @@ Or open the file from `live-viewer/ui/index.html`.
 * `-h`, `--help`: Show a help message and exit.
 
 ```bash
-$ live-viewer --help
+altwalker-viewer --help
 ```
 
 ```bash
-$ live-viewer online --help
+altwalker-viewer online --help
 ```
 
 ```bash
-$ live-viewer open --help
+altwalker-viewer open --help
 ```
 
 ## Development Setup
 
 * python3
 * node
-* npm
+* NPM
 
 ### Install NPM dependencies
 
-```
+```bash
 npm install
 ```
 
 ### Install PyPi dependencies
 
-```
+```bash
 pip install -r requirements
 ```
 
 ### Build the frontend
 
-```
+```bash
 npm run build
 ```
 
-```
+```bash
 npm run start
 ```
 
 ### Install the CLI
 
-```
+```bash
 pip install -e .
 ```
 

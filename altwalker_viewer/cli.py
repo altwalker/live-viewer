@@ -24,7 +24,7 @@ warnings.formatwarning = click_formatwarning
 @click.group(context_settings=CONTEXT_SETTINGS)
 @click.version_option(VERSION , "-v", "--version", prog_name="altwalker-viewer")
 def cli():
-    """A command line tool for starting the live viewer."""
+    """A command-line tool for starting the live viewer."""
 
 
 @cli.command()
