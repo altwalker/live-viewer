@@ -54,4 +54,4 @@ dependencies = {file = "requirements.txt"}
 include-package-data = true
 
 [tool.setuptools.packages.find]
-exclude = ["src*", "exemple*"]
+exclude = ["src*", "example*"]
