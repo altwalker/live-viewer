@@ -44,10 +44,10 @@ dynamic = ["version", "dependencies"]
 "Bug Tracker" = "https://github.com/altwalker/live-viewer/issues"
 
 [project.scripts]
-altwalker-viewer = "viewer.cli:cli"
+altwalker-viewer = "altwalker_viewer.cli:cli"
 
 [tool.setuptools.dynamic]
-version = {attr = "viewer.__version__.VERSION"}
+version = {attr = "altwalker_viewer.__version__.VERSION"}
 dependencies = {file = "requirements.txt"}
 
 [tool.setuptools]
