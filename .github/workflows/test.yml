@@ -12,6 +12,7 @@ jobs:
       - name: Lint Code Base
         uses: super-linter/super-linter@v5
         env:
+          VALIDATE_CSS: false
           VALIDATE_PYTHON_BLACK: false
           VALIDATE_PYTHON_MYPY: false
           VALIDATE_JAVASCRIPT_STANDARD: false

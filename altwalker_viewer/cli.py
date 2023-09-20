@@ -39,7 +39,7 @@ def cli():
               help="The url for the executor.")
 @click.option("--port", "-p", default=5555, help="Sets the port of the websocket service.", show_default=True)
 @click.option("--graphwalker-port", default=9000, help="Sets the port fo the graphwalker service.", show_default=True)
-@click.option("--delay", "-d", default=0.5, help="Sets a delay between steps. (in seconds)", show_default=True)
+@click.option("--delay", "-d", default=0.0, help="Sets a delay between steps. (in seconds)", show_default=True)
 def online(tests, models, executor, url, port, graphwalker_port, delay):
     """Starts the websocket server for an online run."""
 
@@ -60,7 +60,7 @@ def online(tests, models, executor, url, port, graphwalker_port, delay):
 @click.option("--url", default="http://localhost:5000/", show_default=True,
               help="The url for the executor.")
 @click.option("--port", "-p", default=5555, help="Sets the port of the websocket service.", show_default=True)
-@click.option("--delay", "-d", default=0.5, help="Sets a delay between steps. (in seconds)", show_default=True)
+@click.option("--delay", "-d", default=0.0, help="Sets a delay between steps. (in seconds)", show_default=True)
 def walk(tests, models, steps_path, executor, url, port, delay):
     """Starts the websocket server for a walk."""
 
@@ -89,8 +89,11 @@ def open_frontend():
     httpd.serve_forever()
 
 
-def start_server(tests, models=None, executor=None, port=None, graphwalker_port=None, delay=None, steps=None):
+def start_server(tests, models=None, executor=None, url=None, port=None, graphwalker_port=None, delay=None,
+                 steps=None):
+
     click.secho("Starting the websocket server on port: {}".format(port), fg='green', bold=True)
     click.secho("Waiting for a client to connect...\n", fg='green', bold=True)
 
-    start(models, tests, executor=executor, port=port, graphwalker_port=graphwalker_port, delay=delay, steps=steps)
+    start(models, tests, executor=executor, port=port, url=url, graphwalker_port=graphwalker_port, delay=delay,
+          steps=steps)

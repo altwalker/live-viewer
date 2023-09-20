@@ -43,7 +43,7 @@ async def get_json(websocket):
 
 
 async def walk(websocket, tests, models, executor_type, url=None, steps=None, graphwalker_port=None,
-               start_element=None, unvisited=False, blocked=False, delay=0.5):
+               start_element=None, unvisited=False, blocked=False, delay=0.0):
 
     click.secho("Client connected.\n", fg='green', bold=True)
     planner = None

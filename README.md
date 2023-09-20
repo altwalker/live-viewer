@@ -2,7 +2,8 @@
 
 A web application for visualizing the progress of an AltWalker test run.
 
-AltWalker's LiveViewer is a powerful tool designed to enhance your experience with AltWalker. This application provides real-time visualization and monitoring capabilities for your AltWalker test runs, allowing you to gain deeper insights into test execution, track progress, and identify potential issues with ease. With AltWalker's LiveViewer, you can effortlessly keep an eye on the execution of your test models and ensure the success of your testing endeavors.
+AltWalker's LiveViewer is a powerful tool designed to enhance your experience with AltWalker. This application provides real-time visualization and monitoring capabilities for your AltWalker test runs, allowing you to gain deeper insights into test execution, track progress, and identify potential issues with ease. With AltWalker's LiveViewer, you can effortlessly keep an eye on the execution of
+your test models and ensure the success of your testing endeavors.
 
 ![Screenshot](img/screenshot.png)
 
@@ -25,7 +26,7 @@ altwalker-viewer --version
 
 And you should see:
 
-```
+```bash
 altwalker-viewer, version 0.4s.0
 ```
 
@@ -68,7 +69,7 @@ Now visit: <http://localhost:8000/>.
     * `altwalker check` - for the model(s).
     * `altwalker verify` - for code.
 
-2. If you have trouble running the `live-viewer online` command make sure there are no GraphWalker processes running.
+2. If you have trouble running the `altwalker-viewer online` command make sure there are no GraphWalker processes running.
 
 ## Documentation
 
@@ -92,9 +93,9 @@ altwalker-viewer open --help
 
 * python3
 * node
-* NPM
+* npm
 
-### Install NPM dependencies
+### Install npm dependencies
 
 ```bash
 npm install
