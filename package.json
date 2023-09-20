@@ -1,7 +1,7 @@
 {
   "name": "altwalker-live-viewer",
   "version": "0.4.0",
-  "description": "A live viewer for an AltWalker test run.",
+  "description": "A web application for visualizing the progress of an AltWalker test run.",
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

@@ -113,7 +113,6 @@ function updateFailedStep(step) {
 }
 
 // Resize
-
 var dragging = false;
 
 function dragstart(event) {
@@ -142,7 +141,7 @@ function dragend() {
   dragging = false;
 }
 
-window.onload = function() {
+document.addEventListener("DOMContentLoaded", function() {
   document.getElementById("dragbar").addEventListener("mousedown", function(e) { dragstart(e); });
   document.getElementById("dragbar").addEventListener("touchstart", function(e) { dragstart(e); });
 
@@ -150,7 +149,7 @@ window.onload = function() {
   window.addEventListener("touchmove", function(e) { dragmove(e); });
   window.addEventListener("mouseup", dragend);
   window.addEventListener("touchend", dragend);
-}
+});
 
 // Scripts
 
@@ -477,7 +476,7 @@ window.addEventListener("resize", function(event) {
   repaintGraph()
 });
 
-window.onload = function() {
+document.addEventListener("DOMContentLoaded", function() {
   document.getElementById("stop-button").addEventListener("click", function(event) {
     stopAutoplay();
   });
@@ -501,4 +500,4 @@ window.onload = function() {
   document.getElementById("connect-button").addEventListener("click", function(event) {
     connectToWebsocket();
   });
-}
+});
