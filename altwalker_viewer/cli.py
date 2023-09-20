@@ -22,7 +22,7 @@ warnings.formatwarning = click_formatwarning
 
 
 @click.group(context_settings=CONTEXT_SETTINGS)
-@click.version_option(VERSION ,"-v", "--version", prog_name="altwalker-viewer")
+@click.version_option(VERSION , "-v", "--version", prog_name="altwalker-viewer")
 def cli():
     """A command line tool for starting the live viewer."""
 
@@ -30,8 +30,8 @@ def cli():
 @cli.command()
 @click.argument("tests", type=click.Path(exists=True))
 @click.option("--model", "-m", "models",
-    type=(click.Path(exists=True, dir_okay=False), str), required=True, multiple=True,
-    help="The model, as a graphml/json file followed by generator with stop condition.")
+              type=(click.Path(exists=True, dir_okay=False), str), required=True, multiple=True,
+              help="The model, as a graphml/json file followed by generator with stop condition.")
 @click.option("--executor", "-x", "--language", "-l", "executor", type=click.Choice(["python", "c#", "dotnet", "http"]),
               default="python", show_default=True,
               help="Configure the executor to be used.")
@@ -43,16 +43,18 @@ def cli():
 def online(tests, models, executor, url, port, graphwalker_port, delay):
     """Starts the websocket server for an online run."""
 
-    start_server(tests, models, executor=executor, port=port, graphwalker_port=graphwalker_port, delay=delay, steps=None)
+    start_server(tests, models, executor=executor, port=port, graphwalker_port=graphwalker_port, delay=delay,
+                 steps=None)
 
 
 @cli.command()
 @click.argument("tests", type=click.Path(exists=True))
 @click.argument("steps_path", type=click.Path(exists=True, dir_okay=False))
 @click.option("--model", "-m", "models",
-    type=click.Path(exists=True, dir_okay=False), required=True, multiple=True,
-    help="The model, as a graphml/json file followed by generator with stop condition.")
-@click.option("--executor", "-x", "--language", "-l", "executor", type=click.Choice(["python", "c#", "dotnet", "http"]),
+              type=click.Path(exists=True, dir_okay=False), required=True, multiple=True,
+              help="The model, as a graphml/json file followed by generator with stop condition.")
+@click.option("--executor", "-x", "--language", "-l", "executor",
+              type=click.Choice(["python", "c#", "dotnet", "http"]),
               default="python", show_default=True,
               help="Configure the executor to be used.")
 @click.option("--url", default="http://localhost:5000/", show_default=True,
@@ -66,7 +68,8 @@ def walk(tests, models, steps_path, executor, url, port, delay):
         steps = json.load(f)
 
     models = [(model, "") for model in models]
-    start_server(tests, models=models, executor=executor, url=url, port=port, graphwalker_port=None, delay=delay, steps=steps)
+    start_server(tests, models=models, executor=executor, url=url, port=port, graphwalker_port=None, delay=delay,
+                 steps=steps)
 
 
 @cli.command("open")

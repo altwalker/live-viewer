@@ -42,7 +42,9 @@ async def get_json(websocket):
     return json.loads(message)
 
 
-async def walk(websocket, tests, models, executor_type, url=None, steps=None, graphwalker_port=None, start_element=None, unvisited=False, blocked=False, delay=0.5):
+async def walk(websocket, tests, models, executor_type, url=None, steps=None, graphwalker_port=None,
+               start_element=None, unvisited=False, blocked=False, delay=0.5):
+
     click.secho("Client connected.\n", fg='green', bold=True)
     planner = None
     executor = None
@@ -92,8 +94,12 @@ async def walk(websocket, tests, models, executor_type, url=None, steps=None, gr
     click.secho("Waiting for a new client to connect...", fg="green")
 
 
-def start(models, tests, steps=None, executor="python", url="http://localhost:5000/", port=5555, graphwalker_port=9000, delay=0.5):
-    bound_walk = functools.partial(walk, tests=tests, models=models, executor_type=executor, url=url, steps=steps, graphwalker_port=graphwalker_port, start_element=None, unvisited=False, blocked=False, delay=delay)
+def start(models, tests, steps=None, executor="python", url="http://localhost:5000/", port=5555, graphwalker_port=9000,
+          delay=0.5):
+
+    bound_walk = functools.partial(walk, tests=tests, models=models, executor_type=executor, url=url, steps=steps,
+                                   graphwalker_port=graphwalker_port, start_element=None, unvisited=False, blocked=False,
+                                   delay=delay)
     start_server = websockets.serve(bound_walk, 'localhost', port)
 
     asyncio.get_event_loop().run_until_complete(start_server)

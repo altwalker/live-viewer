@@ -18,8 +18,8 @@ class WebsocketReporter(Reporter):
         result["id"] = step.get("id", None)
 
         if step.get("modelName", None):
-            result["output"] = "[{}] {}.{}:\n{}".format(datetime.datetime.now(), step["modelName"], step["name"], result["output"])
+            result["output"] = f"[{datetime.datetime.now()}] {step['modelName']}.{step['name']}:\n{result['output']}"
         else:
-            result["output"] = "[{}] {}\n{}".format(datetime.datetime.now(), step["name"], result["output"])
+            result["output"] = f"[{datetime.datetime.now()}] {step['name']}\n{result['output']}"
 
         asyncio.ensure_future(self.websocket.send(json.dumps({"result": result})))

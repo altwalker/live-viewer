@@ -5,11 +5,10 @@ import time
 
 def generate_random_message(length=30):
     letters = string.ascii_lowercase
-    return ''.join(random.choice(letters) for _ in range(length))
+    return "".join(random.choice(letters) for _ in range(length))
 
 
 class ModelName:
-
     def edge_A(self):
         print(generate_random_message())
         time.sleep(3)
