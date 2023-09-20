@@ -1,6 +1,8 @@
-# LiveViewer
+# AltWalker's LiveViewer
 
-A live viewer for an AltWalker test run.
+A web application for visualizing the progress of an AltWalker test run.
+
+AltWalker's LiveViewer is a powerful tool designed to enhance your experience with AltWalker. This application provides real-time visualization and monitoring capabilities for your AltWalker test runs, allowing you to gain deeper insights into test execution, track progress, and identify potential issues with ease. With AltWalker's LiveViewer, you can effortlessly keep an eye on the execution of your test models and ensure the success of your testing endeavors.
 
 ![Screenshot](img/screenshot.png)
 
@@ -9,17 +11,10 @@ A live viewer for an AltWalker test run.
 > **Note**: You need to have AltWalker installed to use the LiveViewer.
 > You can read the installing documentation [here](https://altwalker.github.io/altwalker/).
 
-Clone the repo:
-
-```bash
-$ git clone https://github.com/altwalker/live-viewer.git
-$ cd live-viewer
-```
-
 Install the command line tool:
 
 ```bash
-$ pip install --editable .
+$ pip install altwalker-live-viewer
 ```
 
 Now if the CLI was installed correctly you can type:
@@ -58,7 +53,7 @@ Example:
 $ live-viewer online tests -m models/default.json "random(never)"
 ```
 
-After you start the websocket server you need to start a webserver (the webserver will serve the LiveViewer frontend).
+After you start the websocket server you need to start a WebServer (the WebServer will serve the LiveViewer frontend).
 
 ```bash
 $ live-viewer open
@@ -94,3 +89,41 @@ $ live-viewer online --help
 ```bash
 $ live-viewer open --help
 ```
+
+## Development Setup
+
+* python3
+* node
+* npm
+
+### Install NPM dependencies
+
+```
+npm install
+```
+
+### Install PyPi dependencies
+
+```
+pip install -r requirements
+```
+
+### Build the frontend
+
+```
+npm run build
+```
+
+```
+npm run start
+```
+
+### Install the CLI
+
+```
+pip install -e .
+```
+
+## License
+
+This project is licensed under the [GNU General Public License v3.0](https://github.com/altwalker/live-viewer/blob/main/LICENSE).

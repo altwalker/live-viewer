@@ -1,3 +1,158 @@
+// Models
+var visualizer = new ModelVisualizer({container: "visualizer", editMode: false});;
+
+var oldStepId = null;
+var scale = d3.scaleLinear().range([0.3, 0.8]).domain([0, 5]).clamp(true);
+var color = (d) => d3.interpolateYlGn(scale(d))
+
+var count = {}
+var failedStep = {}
+
+function displayModels(models) {
+  console.log("Update Graph...");
+
+  visualizer.setModels(models);
+  visualizer.repaint();
+  repaintEdges();
+
+  failedStep = {}
+  count = {}
+}
+
+function setGraphLayoutOptions(options) {
+  console.log(options);
+
+  const graphDirectionsMap = {
+    "Top-Bottom": "TB",
+    "Bottom-Top": "BT",
+    "Left-Right": "LR",
+    "Right-Left": "RL"
+  }
+
+  const layoutOptions = {
+    "rankdir": graphDirectionsMap[options["graphDirection"]],
+    "nodesep": options["vertexSeparation"],
+    "edgesep": options["edgeSeparation"],
+    "ranksep": options["rankSeparation"]
+  }
+
+  visualizer.setGraphLayoutOptions(layoutOptions);
+}
+
+function repaintGraph() {
+  visualizer.repaint();
+
+  Object.keys(count).forEach(function (id) {
+    drawStep(id, false);
+  });
+
+  if (failedStep.id) {
+    updateFailedStep(failedStep);
+  }
+}
+
+function repaintEdges() {
+  // TODO: Remove the Model-Visualizer reset the color of the edge on repaint.
+
+  Object.keys(count).forEach(function (id) {
+    d3.select("svg g#" + id + " path")
+      .style("stroke", "#7f8c8d");
+  });
+}
+
+function updateStep(step) {
+  var id = step["id"] || null;
+  var visits = count[id] || 0;
+
+  count[id] = visits + 1;
+
+  if (oldStepId) {
+    drawOldStep(oldStepId);
+  }
+
+  if (id) {
+    drawStep(id, true);
+  }
+
+  oldStepId = id;
+}
+
+function drawStep(id, current) {
+  d3.select("svg g#" + id + " rect")
+    .style("fill", color(count[id]))
+    .style("stroke", color(count[id]));
+
+  d3.select("svg g#" + id + " path")
+    .style("stroke", color(count[id]))
+
+  if (current) {
+    d3.select("svg g#" + id)
+    .classed("current-node", true)
+    .classed("current-edge", true);
+
+    // Bold edges labels
+    d3.selectAll("svg .edgeLabels tspan").attr("class", (d) => d.name == id ? "current-label" : "");
+  }
+}
+
+function drawOldStep(id) {
+  d3.select("svg g#" + id)
+    .classed("current-node", false)
+    .classed("current-edge", false);
+}
+
+function updateFailedStep(step) {
+  failedStep = step;
+
+  d3.select("svg g#" + step.id + " rect")
+    .style("fill", "#c0392b")
+    .style("stroke", "#c0392b");
+
+  d3.select("svg g#" + step.id + " path")
+    .style("stroke", "#c0392b")
+}
+
+// Resize
+var dragging = false;
+
+function dragstart(event) {
+  event.preventDefault();
+  dragging = true;
+}
+
+function dragmove(event) {
+  if (dragging) {
+    var percentage = (event.pageX / window.innerWidth) * 100;
+
+    if (percentage > 30 && percentage < 70) {
+      var rightPercentage = 100 - 0.05 - percentage;
+
+      document.getElementById("left").style.width = percentage + "%";
+      document.getElementById("right").style.width = rightPercentage + "%";
+    }
+  }
+}
+
+function dragend() {
+  if (dragging) {
+    repaintGraph();
+  }
+
+  dragging = false;
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+  document.getElementById("dragbar").addEventListener("mousedown", function(e) { dragstart(e); });
+  document.getElementById("dragbar").addEventListener("touchstart", function(e) { dragstart(e); });
+
+  window.addEventListener("mousemove", function(e) { dragmove(e); });
+  window.addEventListener("touchmove", function(e) { dragmove(e); });
+  window.addEventListener("mouseup", dragend);
+  window.addEventListener("touchend", dragend);
+});
+
+// Scripts
+
 var port = null;
 var ws = null;
 
@@ -5,7 +160,7 @@ var autoplay = false;
 var maxDelay = 5;
 var currentDelay = 5;
 
-function percentegeColor(percentage) {
+function percentageColor(percentage) {
   if (percentage < 50)
     return "badge-danger"
 
@@ -72,11 +227,11 @@ function hideStatisticsForm() {
   document.getElementById("statistics-form").classList.add("d-none");
 }
 
-function showSettingsOvarlay() {
+function showSettingsOverlay() {
   document.getElementById("settings-overlay").classList.remove("d-none");
 }
 
-function hideSettingsOvarlay() {
+function hideSettingsOverlay() {
   document.getElementById("settings-overlay").classList.add("d-none");
 }
 
@@ -136,7 +291,7 @@ function updateStatistics(statistics) {
   let edgeCoverage = document.getElementById("statistics-edge-coverage");
   edgeCoverage.innerText = statistics.edgeCoverage + "%";
   edgeCoverage.classList.remove(...["badge-danger", "badge-warning", "badge-success"]);
-  edgeCoverage.classList.add(...["badge", percentegeColor(statistics.edgeCoverage)]);
+  edgeCoverage.classList.add(...["badge", percentageColor(statistics.edgeCoverage)]);
 
   document.getElementById("statistics-number-of-edges").innerText = statistics.totalNumberOfEdges;
   document.getElementById("statistics-visited-edges").innerText = statistics.totalNumberOfVisitedEdges;
@@ -145,7 +300,7 @@ function updateStatistics(statistics) {
   let vertexCoverage = document.getElementById("statistics-vertex-coverage");
   vertexCoverage.innerText = statistics.vertexCoverage + "%";
   vertexCoverage.classList.remove(...["badge-danger", "badge-warning", "badge-success"]);
-  vertexCoverage.classList.add(...["badge", percentegeColor(statistics.vertexCoverage)]);
+  vertexCoverage.classList.add(...["badge", percentageColor(statistics.vertexCoverage)]);
 
   document.getElementById("statistics-number-of-vertices").innerText = statistics.totalNumberOfVertices;
   document.getElementById("statistics-visited-vertices").innerText = statistics.totalNumberOfVisitedVertices;
@@ -164,13 +319,13 @@ function hideAutoplayControls() {
   controls.classList.add("d-none");
 }
 
-function showStopControlls() {
+function showStopControls() {
   let controls = document.getElementById("stop-controls");
   controls.classList.add("d-inline-block");
   controls.classList.remove("d-none");
 }
 
-function hideStopControlls() {
+function hideStopControls() {
   let controls = document.getElementById("stop-controls");
   controls.classList.remove("d-inline-block");
   controls.classList.add("d-none");
@@ -207,7 +362,7 @@ function stopAutoplay() {
 }
 
 function stopRun() {
-  hideStopControlls();
+  hideStopControls();
 
   ws.send(JSON.stringify({"autoplay": autoplay}));
   ws.close();
@@ -235,7 +390,7 @@ function saveSettings() {
     "rankSeparation": rankSeparation == 0 ? 50 : rankSeparation,
   });
 
-  hideSettingsOvarlay();
+  hideSettingsOverlay();
 }
 
 function connectToWebsocket() {
@@ -261,7 +416,7 @@ function connectToWebsocket() {
     ws.onerror = function(event) {
       console.log("Error", event);
       showSetupOverlay();
-      showErrorMessage(`Chould not connect to port: ${port}. Make sure the websocket server is running on the selected port.`);
+      showErrorMessage(`Could not connect to port: ${port}. Make sure the websocket server is running on the selected port.`);
     }
     ws.onopen = function(event) {
       ws.send(JSON.stringify({"autoplay": autoplay}));
@@ -307,16 +462,42 @@ function connectToWebsocket() {
         if (autoplay) {
           startCountDown(maxDelay);
         } else {
-          showStopControlls();
+          showStopControls();
         }
       }
     }
   } catch(error) {
     hideLoadingStartButton();
-    showErrorMessage(`Unknow Error.`);
+    showErrorMessage(`Unknown Error.`);
   }
 }
 
 window.addEventListener("resize", function(event) {
   repaintGraph()
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+  document.getElementById("stop-button").addEventListener("click", function(event) {
+    stopAutoplay();
+  });
+  document.getElementById("skip-button").addEventListener("click", function(event) {
+    skipCountDown();
+  });
+  document.getElementById("stop-button").addEventListener("click", function(event) {
+    stopRun();
+  });
+
+  document.getElementById("settings-button").addEventListener("click", function(event) {
+    showSettingsOverlay();
+  });
+  document.getElementById("save-settings-button").addEventListener("click", function(event) {
+    saveSettings();
+  });
+  document.getElementById("hide-settings-button").addEventListener("click", function(event) {
+    hideSettingsOverlay();
+  });
+
+  document.getElementById("connect-button").addEventListener("click", function(event) {
+    connectToWebsocket();
+  });
 });

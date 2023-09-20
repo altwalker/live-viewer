@@ -1,0 +1,47 @@
+name: Deploy
+
+on: push
+
+jobs:
+  build:
+    runs-on: 'ubuntu-latest'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js 16.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+
+      - name: Install npm dependencies
+        run: |
+          npm install
+
+      - name: Build the UI
+        run: |
+          npm run build:prod
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: "viewer/dist/"
+
+  deploy:
+    needs: build
+    runs-on: 'ubuntu-latest'
+
+    if: github.ref == 'refs/heads/main'
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
