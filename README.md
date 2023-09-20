@@ -9,22 +9,21 @@ your test models and ensure the success of your testing endeavors.
 
 ## Setup
 
-> **Note**: You need to have AltWalker installed to use the LiveViewer.
-> You can read the installing documentation [here](https://altwalker.github.io/altwalker/).
+Before you begin using AltWalker's LiveViewer, make sure you have AltWalker installed. If you haven't already, you can follow the installation instructions [here](https://altwalker.github.io/altwalker/).
 
-Install the command-line tool:
+Install the AltWalker LiveViewer command-line tool:
 
 ```bash
 pip install altwalker-live-viewer
 ```
 
-Now if the CLI was installed correctly you can type:
+To verify that the CLI was installed correctly, run:
 
 ```bash
 altwalker-viewer --version
 ```
 
-And you should see:
+You should see the version information displayed:
 
 ```bash
 altwalker-viewer, version 0.4s.0
@@ -32,44 +31,47 @@ altwalker-viewer, version 0.4s.0
 
 ## Running
 
-Prerequisites:
+To use `altwalker-viewer`, you'll need the following prerequisites:
 
-* model(s)
-* test code for the model(s)
+* Test model(s)
+* Test code for the model(s)
 
-> **Note**:
-> If you can run your tests using `altwalker online` you have everything you need for the LiveViewer.
+If you can run your tests using `altwalker online`, you already have everything you need for the LiveViewer.
 
-The `altwalker-viewer online` command shares the arguments and options with `altwalker online`, with the exception that `-p` will set the websocket.
+The `altwalker-viewer online` command shares arguments and options with `altwalker online`. However, it includes the `-p` option to set up the WebSocket port.
 
-To start the websocket server:
+To start the WebSocket server:
 
 ```bash
 altwalker-viewer online path/to/tests/ -m path/to/model.json "generator(stop_condition)" -x [python|dotnet]
 ```
 
-Example:
+For example:
 
 ```bash
 altwalker-viewer online tests -m models/default.json "random(never)"
 ```
 
-After you start the websocket server you need to start a WebServer (the WebServer will serve the LiveViewer frontend).
+Now, open your web browser and visit: <https://altwalker.github.io/live-viewer/>.
+
+If you want to run the frontend locally, you'll need to start a WebServer, which serves the LiveViewer frontend.
 
 ```bash
 altwalker-viewer open
 ```
 
-Now visit: <http://localhost:8000/>.
+Now, open your web browser and visit: <http://localhost:8000/>.
 
 ## Troubleshooting
 
-1. If you have troubles running the LiveViewer make sure that your models and code are valid. Ues:
+If you encounter any issues while using the LiveViewer, consider the following steps:
 
-    * `altwalker check` - for the model(s).
-    * `altwalker verify` - for code.
+1. **Check Model and Code Validity**: First, ensure that your models and code are valid by using the following commands:
 
-2. If you have trouble running the `altwalker-viewer online` command make sure there are no GraphWalker processes running.
+    * `altwalker check` for the model(s)
+    * `altwalker verify` for code
+
+1. **Terminating GraphWalker Processes**: If you experience problems when running the `altwalker-viewer online` command, it's essential to check for any existing GraphWalker processes. If any GraphWalker processes are running, you should stop them before running the `altwalker-viewer online` command.
 
 ## Documentation
 
@@ -107,7 +109,7 @@ npm install
 pip install -r requirements
 ```
 
-### Build the frontend
+### Build the Frontend
 
 ```bash
 npm run build
