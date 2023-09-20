@@ -81,7 +81,7 @@ def open_frontend():
     click.echo("http://localhost:8000")
 
     path = pathlib.Path(__file__).parent
-    view_path = pathlib.Path("../ui/")
+    view_path = pathlib.Path("./dist")
     os.chdir(path.joinpath(view_path).resolve())
 
     server_address = ('', 8000)
