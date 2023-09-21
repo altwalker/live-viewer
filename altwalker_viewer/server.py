@@ -74,7 +74,7 @@ async def walk(websocket, tests, models, executor_type, url=None, steps=None, gr
                                  verbose=True, unvisited=unvisited, blocked=blocked)
         atexit.register(kill_planner, planner)
 
-        executor = create_executor(tests, executor_type, url=url)
+        executor = create_executor(executor_type, tests, url=url)
         atexit.register(kill_executor, executor)
 
         reporter = _create_reporter(websocket)
