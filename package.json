@@ -1,6 +1,6 @@
 {
   "name": "altwalker-live-viewer",
-  "version": "0.4.0",
+  "version": "0.4.2-alpha",
   "description": "A web application for visualizing the progress of an AltWalker test run.",
   "private": true,
   "scripts": {
