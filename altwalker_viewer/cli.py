@@ -15,14 +15,17 @@
 
 import http.server
 import json
+import logging
 import os
 import pathlib
 import warnings
+from multiprocessing import Process
 
 import click
 
 from .__version__ import VERSION
-from .server import start
+from .syncserver import start
+from .syncwalker import run
 
 CONTEXT_SETTINGS = dict(help_option_names=["--help", "-h"])
 
@@ -36,10 +39,44 @@ def click_formatwarning(message, category, filename, lineno, file=None, line=Non
 warnings.formatwarning = click_formatwarning
 
 
+def add_options(options):
+    def _add_options(func):
+        for option in reversed(options):
+            func = option(func)
+        return func
+    return _add_options
+
+
 @click.group(context_settings=CONTEXT_SETTINGS)
 @click.version_option(VERSION , "-v", "--version", prog_name="altwalker-viewer")
-def cli():
+@click.option("--log-level",
+              type=click.Choice(["CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG", "NOTSET"], case_sensitive=False),
+              default=None, show_default=True, envvar="ALTWALKER_LOG_LEVEL",
+              help="Sets the logger level to the specified level.")
+@click.option("--log-file", type=click.Path(exists=False, dir_okay=False), envvar="ALTWALKER_LOG_FILE",
+              help="Sends logging output to a file.")
+def cli(log_level, log_file):
     """A command-line tool for starting the live viewer."""
+
+    logger = logging.getLogger(__package__)
+
+    if log_level:
+        logger.setLevel(log_level.upper())
+
+    if log_file:
+        formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+        handler = logging.FileHandler(filename=log_file)
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+
+
+@cli.command()
+@click.option("--host", "-h", "host", default="localhost", help="Set the binding host for the WebSocket server.", show_default=True)
+@click.option("--port", "-p", "port", default=5555, help="Set the port for the WebSocket server.", show_default=True)
+def serve(host, port):
+    """Starts the WebSocket server."""
+
+    start(host=host, port=port)
 
 
 @cli.command()
@@ -58,8 +95,14 @@ def cli():
 def online(tests, models, executor, url, port, graphwalker_port, delay):
     """Starts the websocket server for an online run."""
 
-    start_server(tests, models, executor=executor, port=port, graphwalker_port=graphwalker_port, delay=delay,
-                 steps=None)
+    p = Process(target=start, args=('localhost', port))
+    p.start()
+
+    run(tests, models, executor, url=url, graphwalker_port=graphwalker_port,
+             steps=None)
+
+    p.terminate()
+    p.join()
 
 
 @cli.command()
@@ -83,12 +126,14 @@ def walk(tests, models, steps_path, executor, url, port, delay):
         steps = json.load(f)
 
     models = [(model, "") for model in models]
-    start_server(tests, models=models, executor=executor, url=url, port=port, graphwalker_port=None, delay=delay,
-                 steps=steps)
+    run(tests, models=models, executor=executor, url=url, port=port, graphwalker_port=None, delay=delay,
+             steps=steps)
 
 
 @cli.command("open")
-def open_frontend():
+@click.option("--host", "-h", "host", default="localhost", help="Set the binding host for the HTTP server.", show_default=True)
+@click.option("--port", "-p", "port", default=5555, help="Set the port for the HTTP server.", show_default=True)
+def open_frontend(host, port):
     """Starts a web server for the html page."""
 
     click.secho("Starting the web server...", fg='green', bold=True)
@@ -99,16 +144,6 @@ def open_frontend():
     view_path = pathlib.Path("./dist")
     os.chdir(path.joinpath(view_path).resolve())
 
-    server_address = ('', 8000)
+    server_address = (host, port)
     httpd = http.server.HTTPServer(server_address, http.server.CGIHTTPRequestHandler)
     httpd.serve_forever()
-
-
-def start_server(tests, models=None, executor=None, url=None, port=None, graphwalker_port=None, delay=None,
-                 steps=None):
-
-    click.secho("Starting the websocket server on port: {}".format(port), fg='green', bold=True)
-    click.secho("Waiting for a client to connect...\n", fg='green', bold=True)
-
-    start(models, tests, executor=executor, port=port, url=url, graphwalker_port=graphwalker_port, delay=delay,
-          steps=steps)
