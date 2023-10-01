@@ -13,56 +13,92 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import traceback
+import json
 
-import click
+from altwalker.exceptions import FailedTestsError, handle_errors
 from altwalker.executor import create_executor
 from altwalker.model import get_models
 from altwalker.planner import create_planner
-from altwalker.reporter import ClickReporter, Reporting
+from altwalker.reporter import create_reporters
 from altwalker.walker import create_walker
 
 from .reporter import SyncWebsocketReporter
 
 
-def _create_reporter(models_json):
-    reporter = Reporting()
-    reporter.register("click", ClickReporter())
-    reporter.register("websocket", SyncWebsocketReporter(models_json=models_json))
+def _create_reporters(*args, models_json=None, **kwargs):
+    reporters = create_reporters(*args, **kwargs)
+    reporters.register("websocket", SyncWebsocketReporter(models_json=models_json))
 
-    return reporter
+    return reporters
 
 
-def run(tests, models, executor_type, url=None, steps=None, graphwalker_port=None,
-             start_element=None, unvisited=False, blocked=False):
+def run(test_package, *args, executor_type=None, executor_url=None, steps=None, models=None,
+        gw_host=None, gw_port=8887, start_element=None, verbose=False, unvisited=False, blocked=False,
+        reporter=None, import_mode=None, **kwargs):
 
+    reporter = reporter or create_reporters()
     planner = None
     executor = None
 
     try:
-        models_json = get_models([model for model, _ in models])
-
-        planner = create_planner(models=models, steps=steps, port=graphwalker_port, start_element=start_element,
-                                 verbose=True, unvisited=unvisited, blocked=blocked)
-
-        executor = create_executor(executor_type, tests, url=url)
-        reporter = _create_reporter(models_json)
+        planner = create_planner(models=models, steps=steps, host=gw_host, port=gw_port, start_element=start_element,
+                                 verbose=verbose, unvisited=unvisited, blocked=blocked)
+        executor = create_executor(executor_type, test_package, url=executor_url, import_mode=import_mode)
 
         walker = create_walker(planner, executor, reporter=reporter)
-
-        for _ in walker:
-            planner.get_data()
-    except Exception as error:
-        click.secho("Test run ended with an error.")
-
-        click.secho("\nError: ", fg="red", bold=True, nl=False)
-        click.secho(str(error), fg="red")
-
-        click.echo()
-        click.secho(traceback.format_exc(), fg="red")
+        walker.run()
+    except:
+        print(">>>>>>> here")
     finally:
-        if executor:
+        if planner is not None:
+            planner.kill()
+
+        if executor is not None:
             executor.kill()
 
-        if planner:
-            planner.kill()
+    return {
+        "status": walker.status,
+        "report": reporter.report()
+    }
+
+
+@handle_errors
+def online(test_package, models, executor_type=None, executor_url=None, gw_host=None, gw_port=8887,
+           start_element=None, verbose=False, unvisited=False, blocked=False, import_mode=None, **kwargs):
+
+    print("A")
+    models_json = get_models([model for model, _ in models])
+    reporter = _create_reporters(**kwargs, models_json=models_json)
+    response = run(
+        test_package, models=models,
+        executor_type=executor_type, executor_url=executor_url, import_mode=import_mode,
+        gw_port=gw_port, gw_host=gw_host, start_element=start_element,
+        verbose=verbose, unvisited=unvisited, blocked=blocked,
+        reporter=reporter)
+
+    print("B")
+
+    if not response["status"]:
+        raise FailedTestsError()
+
+
+
+@handle_errors
+def walk(test_package, models, steps_file, executor_type=None, executor_url=None, import_mode=None, **kwargs):
+    with open(steps_file) as fp:
+        steps = json.load(fp)
+
+    models_json = get_models([model for model in models])
+
+    reporter = _create_reporters(**kwargs, models_json=models_json)
+    response = run(
+        test_package,
+        steps=steps,
+        executor_type=executor_type,
+        executor_url=executor_url,
+        import_mode=import_mode,
+        reporter=reporter
+    )
+
+    if not response["status"]:
+        raise FailedTestsError()

@@ -20,7 +20,8 @@ import json
 from websockets.sync.client import connect
 
 
-class WebsocketTestClient:
+class EchoViewer:
+    """Test websocket client."""
 
     def __init__(self, host="127.0.0.1", port=5555):
         self.websocket = connect(f"ws://{host}:{port}/")
@@ -43,5 +44,5 @@ class WebsocketTestClient:
 
 
 if __name__ == "__main__":
-    client = WebsocketTestClient()
+    client = EchoViewer()
     client.start()

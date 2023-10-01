@@ -25,10 +25,9 @@ class SyncWebsocketReporter(Reporter):
     """This reporter sends the report through a websocket."""
 
     def __init__(self, host="localhost", port=5555, models_json=None):
+        self.host = host
+        self.port= port
         self.models_json = models_json
-
-        self.websocket = connect(f"ws://{host}:{port}/")
-        self.websocket.send(json.dumps({"type": "init", "client": "reporter"}))
 
     def start(self, message=None):
         """Report the start of a run.
@@ -37,12 +36,13 @@ class SyncWebsocketReporter(Reporter):
             message (:obj:`str`): A message.
         """
 
+        self.websocket = connect(f"ws://{self.host}:{self.port}/")
+        self.websocket.send(json.dumps({"type": "init", "client": "reporter"}))
         self.websocket.send(json.dumps({"type": "start", "models": self.models_json}))
 
         print("Waiting for viewer....")
         message = self.websocket.recv()
         event = json.loads(message)
-
         assert event["type"] == "start"
 
     def end(self, message=None, statistics=None, status=None):
@@ -89,3 +89,5 @@ class SyncWebsocketReporter(Reporter):
             message (:obj:`str`): The message of the error.
             trace (:obj:`str`): The traceback.
         """
+
+        # self.websocket.send(json.dumps({"type": "error", "step": step}))

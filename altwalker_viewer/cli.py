@@ -22,12 +22,94 @@ import warnings
 from multiprocessing import Process
 
 import click
+from altwalker.executor import get_supported_executors
+from altwalker.generate import get_supported_languages
+from altwalker.loader import get_supported_loaders
 
 from .__version__ import VERSION
 from .syncserver import start
-from .syncwalker import run
+from . import syncwalker
+
 
 CONTEXT_SETTINGS = dict(help_option_names=["--help", "-h"])
+
+
+model_and_generator_option = click.option(
+    "--model", "-m", "models", type=(click.Path(exists=True, dir_okay=False), str),
+    required=True, multiple=True,
+    help="The model as a graphml/json file followed by a generator with a stop condition.")
+
+model_file_option = click.option(
+    "--model", "-m", "model_paths", type=click.Path(exists=True, dir_okay=False),
+    required=True, multiple=True,
+    help="The model as a graphml/json file.")
+
+
+start_element_option = click.option(
+    "--start-element", "-e",
+    help="Sets the starting element in the first model.")
+
+verbose_option = click.option(
+    "--verbose", "-o", default=False, show_default=True, is_flag=True,
+    help="Will also print the model data and the properties for each step.")
+
+unvisited_option = click.option(
+    "--unvisited", "-u", default=False, show_default=True, is_flag=True,
+    help="Will also print the remaining unvisited elements in the model.")
+
+blocked_option = click.option(
+    "--blocked", "-b", default=False, show_default=True, is_flag=True,
+    help="Will filter out elements with the blocked property.")
+
+language_option = click.option(
+    "--language", "-l", type=click.Choice(get_supported_languages(), case_sensitive=False),
+    help="Configure the programming language of the tests.")
+
+executor_option = click.option(
+    "--executor", "-x", "--language", "-l", "executor_type",
+    type=click.Choice(get_supported_executors(), case_sensitive=False),
+    default="python", show_default=True,
+    help="Configure the executor to be used.")
+
+executor_url_option = click.option(
+    "--executor-url", help="Sets the url for the executor.")
+
+import_mode_option = click.option(
+    "--import-mode", "import_mode",
+    type=click.Choice(get_supported_loaders(), case_sensitive=False),
+    default="importlib", show_default=True, envvar="ALTWALKER_IMPORT_MODE",
+    help="Sets the importing mode for the Python language, which controls how modules are loaded and executed."
+)
+
+
+graphwalker_host_option = click.option(
+    "--gw-host",
+    help="Sets the host of the GraphWalker REST service.")
+
+graphwalker_port_option = click.option(
+    "--gw-port", default=8887, show_default=True,
+    help="Sets the port of the GraphWalker REST service.")
+
+
+report_file_option = click.option(
+    "--report-file", type=click.Path(exists=False, dir_okay=False),
+    help="Save the report in a file.")
+
+report_path_option = click.option(
+    "--report-path", default=False, is_flag=True,
+    help="Report the execution path and save it into a file (path.json by default).")
+
+report_path_file_option = click.option(
+    "--report-path-file", type=click.Path(exists=False, dir_okay=False),
+    help="Set the report path file.")
+
+report_xml_option = click.option(
+    "--report-xml", default=False, is_flag=True,
+    help="Report the execution path and save it into a file (report.xml by default).")
+
+report_xml_file_option = click.option(
+    "--report-xml-file", type=click.Path(exists=False, dir_okay=False),
+    help="Set the xml report file.")
 
 
 def click_formatwarning(message, category, filename, lineno, file=None, line=None):
@@ -80,54 +162,47 @@ def serve(host, port):
 
 
 @cli.command()
-@click.argument("tests", type=click.Path(exists=True))
-@click.option("--model", "-m", "models",
-              type=(click.Path(exists=True, dir_okay=False), str), required=True, multiple=True,
-              help="The model, as a graphml/json file followed by generator with stop condition.")
-@click.option("--executor", "-x", "--language", "-l", "executor", type=click.Choice(["python", "c#", "dotnet", "http"]),
-              default="python", show_default=True,
-              help="Configure the executor to be used.")
-@click.option("--url", default="http://localhost:5000/", show_default=True,
-              help="The url for the executor.")
-@click.option("--port", "-p", default=5555, help="Sets the port of the websocket service.", show_default=True)
-@click.option("--graphwalker-port", default=9000, help="Sets the port fo the graphwalker service.", show_default=True)
-@click.option("--delay", "-d", default=0.0, help="Sets a delay between steps. (in seconds)", show_default=True)
-def online(tests, models, executor, url, port, graphwalker_port, delay):
+@click.argument("test_package", type=click.Path(exists=True))
+@click.option("--host", "-h", "host", default="localhost", help="Set the binding host for the WebSocket server.", show_default=True)
+@click.option("--port", "-p", "port", default=5555, help="Set the port for the WebSocket server.", show_default=True)
+@add_options([graphwalker_host_option, graphwalker_port_option,
+              model_and_generator_option, start_element_option, executor_option, executor_url_option,
+              verbose_option, unvisited_option, blocked_option,
+              report_path_option, report_path_file_option, report_file_option,
+              report_xml_option, report_xml_file_option, import_mode_option])
+def online(test_package, models, port, host, **options):
     """Starts the websocket server for an online run."""
 
-    p = Process(target=start, args=('localhost', port))
+    p = Process(target=start, args=(host, port))
     p.start()
 
-    run(tests, models, executor, url=url, graphwalker_port=graphwalker_port,
-             steps=None)
+    syncwalker.online(test_package, models, **options)
 
     p.terminate()
     p.join()
 
 
 @cli.command()
-@click.argument("tests", type=click.Path(exists=True))
+@click.argument("test_package", type=click.Path(exists=True))
 @click.argument("steps_path", type=click.Path(exists=True, dir_okay=False))
-@click.option("--model", "-m", "models",
-              type=click.Path(exists=True, dir_okay=False), required=True, multiple=True,
-              help="The model, as a graphml/json file followed by generator with stop condition.")
-@click.option("--executor", "-x", "--language", "-l", "executor",
-              type=click.Choice(["python", "c#", "dotnet", "http"]),
-              default="python", show_default=True,
-              help="Configure the executor to be used.")
-@click.option("--url", default="http://localhost:5000/", show_default=True,
-              help="The url for the executor.")
-@click.option("--port", "-p", default=5555, help="Sets the port of the websocket service.", show_default=True)
-@click.option("--delay", "-d", default=0.0, help="Sets a delay between steps. (in seconds)", show_default=True)
-def walk(tests, models, steps_path, executor, url, port, delay):
+@click.option("--host", "-h", "host", default="localhost", help="Set the binding host for the WebSocket server.", show_default=True)
+@click.option("--port", "-p", "port", default=5555, help="Set the port for the WebSocket server.", show_default=True)
+@add_options([executor_option, executor_url_option, import_mode_option,
+              report_path_option, report_path_file_option, report_file_option,
+              report_xml_option, report_xml_file_option])
+def walk(test_package, steps_path, host, port, **options):
     """Starts the websocket server for a walk."""
+
+    p = Process(target=start, args=(host, port))
+    p.start()
 
     with open(steps_path) as f:
         steps = json.load(f)
 
-    models = [(model, "") for model in models]
-    run(tests, models=models, executor=executor, url=url, port=port, graphwalker_port=None, delay=delay,
-             steps=steps)
+    syncwalker.walk(test_package, steps, **options)
+
+    p.terminate()
+    p.join()
 
 
 @cli.command("open")
