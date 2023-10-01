@@ -26,10 +26,9 @@ from altwalker.executor import get_supported_executors
 from altwalker.generate import get_supported_languages
 from altwalker.loader import get_supported_loaders
 
+from . import syncwalker
 from .__version__ import VERSION
 from .syncserver import start
-from . import syncwalker
-
 
 CONTEXT_SETTINGS = dict(help_option_names=["--help", "-h"])
 

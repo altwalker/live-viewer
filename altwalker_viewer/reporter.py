@@ -16,9 +16,8 @@
 import datetime
 import json
 
-from websockets.sync.client import connect
-
 from altwalker.reporter import Reporter
+from websockets.sync.client import connect
 
 
 class SyncWebsocketReporter(Reporter):
@@ -26,7 +25,7 @@ class SyncWebsocketReporter(Reporter):
 
     def __init__(self, host="localhost", port=5555, models_json=None):
         self.host = host
-        self.port= port
+        self.port = port
         self.models_json = models_json
 
     def start(self, message=None):

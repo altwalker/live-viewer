@@ -25,7 +25,7 @@ CONNECTED = {
 
 
 def reporter_handler(websocket):
-    while CONNECTED["viewer"] == None:
+    while CONNECTED["viewer"] is None:
         time.sleep(0.1)
 
     try:
@@ -36,7 +36,7 @@ def reporter_handler(websocket):
 
 
 def viewer_handler(websocket):
-    while CONNECTED["reporter"] == None:
+    while CONNECTED["reporter"] is None:
         time.sleep(0.1)
 
     try:

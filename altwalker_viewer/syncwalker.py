@@ -47,8 +47,6 @@ def run(test_package, *args, executor_type=None, executor_url=None, steps=None, 
 
         walker = create_walker(planner, executor, reporter=reporter)
         walker.run()
-    except:
-        print(">>>>>>> here")
     finally:
         if planner is not None:
             planner.kill()
@@ -66,7 +64,6 @@ def run(test_package, *args, executor_type=None, executor_url=None, steps=None, 
 def online(test_package, models, executor_type=None, executor_url=None, gw_host=None, gw_port=8887,
            start_element=None, verbose=False, unvisited=False, blocked=False, import_mode=None, **kwargs):
 
-    print("A")
     models_json = get_models([model for model, _ in models])
     reporter = _create_reporters(**kwargs, models_json=models_json)
     response = run(
@@ -75,8 +72,6 @@ def online(test_package, models, executor_type=None, executor_url=None, gw_host=
         gw_port=gw_port, gw_host=gw_host, start_element=start_element,
         verbose=verbose, unvisited=unvisited, blocked=blocked,
         reporter=reporter)
-
-    print("B")
 
     if not response["status"]:
         raise FailedTestsError()
