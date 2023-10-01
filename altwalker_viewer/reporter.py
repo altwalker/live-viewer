@@ -40,8 +40,8 @@ class SyncWebsocketReporter(Reporter):
         self.websocket.send(json.dumps({"type": "start", "models": self.models_json}))
 
         print("Waiting for viewer....")
-        message = self.websocket.recv()
-        event = json.loads(message)
+        data = self.websocket.recv()
+        event = json.loads(data)
         assert event["type"] == "start"
 
     def end(self, message=None, statistics=None, status=None):
