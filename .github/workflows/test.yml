@@ -9,15 +9,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Load super-linter env variables
+        run: |
+          cat .github/super-linter.env >> "$GITHUB_ENV"
+
       - name: Lint Code Base
         uses: super-linter/super-linter@v5
         env:
-          VALIDATE_CSS: false
-          VALIDATE_PYTHON_BLACK: false
-          VALIDATE_PYTHON_MYPY: false
-          VALIDATE_JSCPD: false
-          VALIDATE_JAVASCRIPT_STANDARD: false
-          DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   functional:
