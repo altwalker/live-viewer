@@ -77,7 +77,6 @@ def online(test_package, models, executor_type=None, executor_url=None, gw_host=
         raise FailedTestsError()
 
 
-
 @handle_errors
 def walk(test_package, models, steps_file, executor_type=None, executor_url=None, import_mode=None, **kwargs):
     with open(steps_file) as fp:

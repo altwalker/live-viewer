@@ -147,7 +147,7 @@ def websocket_server(host="127.0.0.1", port=5555):
 
 
 @click.group(context_settings=CONTEXT_SETTINGS)
-@click.version_option(VERSION , "-v", "--version", prog_name="altwalker-viewer")
+@click.version_option(VERSION, "-v", "--version", prog_name="altwalker-viewer")
 @click.option("--log-level",
               type=click.Choice(["CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG", "NOTSET"], case_sensitive=False),
               default=None, show_default=True, envvar="ALTWALKER_LOG_LEVEL",
@@ -170,8 +170,10 @@ def cli(log_level=None, log_file=None):
 
 
 @cli.command()
-@click.option("--host", "-h", "host", default="localhost", help="Set the binding host for the WebSocket server.", show_default=True)
-@click.option("--port", "-p", "port", default=5555, help="Set the port for the WebSocket server.", show_default=True)
+@click.option("--host", "-h", "host", default="localhost", show_default=True,
+              help="Set the binding host for the WebSocket server.")
+@click.option("--port", "-p", "port", default=5555, show_default=True,
+              help="Set the port for the WebSocket server.")
 def serve(host, port):
     """Starts the WebSocket server."""
 
@@ -180,8 +182,10 @@ def serve(host, port):
 
 @cli.command()
 @click.argument("test_package", type=click.Path(exists=True))
-@click.option("--host", "-h", "host", default="localhost", help="Set the binding host for the WebSocket server.", show_default=True)
-@click.option("--port", "-p", "port", default=5555, help="Set the port for the WebSocket server.", show_default=True)
+@click.option("--host", "-h", "host", default="localhost", show_default=True,
+              help="Set the binding host for the WebSocket server.")
+@click.option("--port", "-p", "port", default=5555, show_default=True,
+              help="Set the port for the WebSocket server.")
 @add_options([graphwalker_host_option, graphwalker_port_option,
               model_and_generator_option, start_element_option, executor_option, executor_url_option,
               verbose_option, unvisited_option, blocked_option,
@@ -197,9 +201,10 @@ def online(test_package, models, port, host, **options):
 @cli.command()
 @click.argument("test_package", type=click.Path(exists=True))
 @click.argument("steps_path", type=click.Path(exists=True, dir_okay=False))
-@click.option("--host", "-h", "host", default="localhost", help="Set the binding host for the WebSocket server.", show_default=True)
-@click.option("--port", "-p", "port", default=5555, help="Set the port for the WebSocket server.", show_default=True)
-@add_options([executor_option, executor_url_option, import_mode_option,
+@click.option("--host", "-h", "host", default="localhost", show_default=True,
+              help="Set the binding host for the WebSocket server.")
+@click.option("--port", "-p", "port", default=5555, show_default=True,
+              help="Set the port for the WebSocket server.")@add_options([executor_option, executor_url_option, import_mode_option,
               report_path_option, report_path_file_option, report_file_option,
               report_xml_option, report_xml_file_option])
 def walk(test_package, steps_path, host, port, **options):
@@ -213,8 +218,10 @@ def walk(test_package, steps_path, host, port, **options):
 
 
 @cli.command("open")
-@click.option("--host", "-h", "host", default="localhost", help="Set the binding host for the HTTP server.", show_default=True)
-@click.option("--port", "-p", "port", default=5555, help="Set the port for the HTTP server.", show_default=True)
+@click.option("--host", "-h", "host", default="localhost", show_default=True,
+              help="Set the binding host for the HTTP server.")
+@click.option("--port", "-p", "port", default=8888, show_default=True,
+              help="Set the port for the HTTP server.")
 def open_frontend(host, port):
     """Starts a web server for the html page."""
 
