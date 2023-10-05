@@ -204,7 +204,8 @@ def online(test_package, models, port, host, **options):
 @click.option("--host", "-h", "host", default="localhost", show_default=True,
               help="Set the binding host for the WebSocket server.")
 @click.option("--port", "-p", "port", default=5555, show_default=True,
-              help="Set the port for the WebSocket server.")@add_options([executor_option, executor_url_option, import_mode_option,
+              help="Set the port for the WebSocket server.")
+@add_options([executor_option, executor_url_option, import_mode_option,
               report_path_option, report_path_file_option, report_file_option,
               report_xml_option, report_xml_file_option])
 def walk(test_package, steps_path, host, port, **options):
