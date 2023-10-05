@@ -19,6 +19,7 @@ import logging
 import os
 import pathlib
 import warnings
+from contextlib import contextmanager
 from multiprocessing import Process
 
 import click
@@ -28,6 +29,7 @@ from altwalker.loader import get_supported_loaders
 
 from . import syncwalker
 from .__version__ import VERSION
+from .client import is_server_running
 from .syncserver import start
 
 CONTEXT_SETTINGS = dict(help_option_names=["--help", "-h"])
@@ -128,6 +130,22 @@ def add_options(options):
     return _add_options
 
 
+@contextmanager
+def websocket_server(host="127.0.0.1", port=5555):
+    """Context manager to ensure a WebSocket server is running and close it when done."""
+
+    server_process = None
+    if not is_server_running(host, port):
+        server_process = Process(target=start, args=(host, port))
+        server_process.start()
+
+    yield server_process
+
+    if server_process is not None:
+        server_process.terminate()
+        server_process.join()
+
+
 @click.group(context_settings=CONTEXT_SETTINGS)
 @click.version_option(VERSION , "-v", "--version", prog_name="altwalker-viewer")
 @click.option("--log-level",
@@ -136,7 +154,7 @@ def add_options(options):
               help="Sets the logger level to the specified level.")
 @click.option("--log-file", type=click.Path(exists=False, dir_okay=False), envvar="ALTWALKER_LOG_FILE",
               help="Sends logging output to a file.")
-def cli(log_level, log_file):
+def cli(log_level=None, log_file=None):
     """A command-line tool for starting the live viewer."""
 
     logger = logging.getLogger(__package__)
@@ -172,13 +190,8 @@ def serve(host, port):
 def online(test_package, models, port, host, **options):
     """Starts the websocket server for an online run."""
 
-    p = Process(target=start, args=(host, port))
-    p.start()
-
-    syncwalker.online(test_package, models, **options)
-
-    p.terminate()
-    p.join()
+    with websocket_server(host=host, port=port):
+        syncwalker.online(test_package, models, **options)
 
 
 @cli.command()
@@ -192,16 +205,11 @@ def online(test_package, models, port, host, **options):
 def walk(test_package, steps_path, host, port, **options):
     """Starts the websocket server for a walk."""
 
-    p = Process(target=start, args=(host, port))
-    p.start()
-
     with open(steps_path) as f:
         steps = json.load(f)
 
-    syncwalker.walk(test_package, steps, **options)
-
-    p.terminate()
-    p.join()
+    with websocket_server(host=host, port=port):
+        syncwalker.walk(test_package, steps, **options)
 
 
 @cli.command("open")

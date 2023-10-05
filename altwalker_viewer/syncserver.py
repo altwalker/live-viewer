@@ -18,6 +18,8 @@ import time
 
 from websockets.sync.server import serve
 
+from .__version__ import VERSION
+
 CONNECTED = {
     "reporter": None,
     "viewer": None
@@ -46,6 +48,10 @@ def viewer_handler(websocket):
         CONNECTED["viewer"] = None
 
 
+def status_handler(websocket):
+    websocket.send(json.dumps({"status": "RUNNING", "version": VERSION}))
+
+
 def handler(websocket):
     print("Server started.")
 
@@ -65,6 +71,9 @@ def handler(websocket):
 
         CONNECTED["viewer"] = websocket
         viewer_handler(websocket)
+
+    if event.get("client") == "status":
+        status_handler(websocket)
 
     websocket.close()
 

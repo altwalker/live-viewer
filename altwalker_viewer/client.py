@@ -20,6 +20,21 @@ import json
 from websockets.sync.client import connect
 
 
+def get_server_status(host="127.0.0.1", port=5555):
+    try:
+        websocket = connect(f"ws://{host}:{port}/")
+        websocket.send(json.dumps({"type": "init", "client": "status"}))
+        message = websocket.recv()
+        return json.loads(message)
+    except ConnectionRefusedError:
+        return {"status": "UNKNOWN"}
+
+
+def is_server_running(host="127.0.0.1", port=5555):
+    json_status = get_server_status(host=host, port=port)
+    return json_status["status"] == "RUNNING"
+
+
 class EchoViewer:
     """Test websocket client."""
 
