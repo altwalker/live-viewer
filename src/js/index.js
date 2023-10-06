@@ -178,11 +178,13 @@ var maxDelay = 5;
 var currentDelay = 5;
 
 function percentageColor(percentage) {
-  if (percentage < 50)
+  if (percentage < 50) {
     return "badge-danger"
+  }
 
-  if (percentage < 80)
+  if (percentage < 80) {
     return "badge-warning"
+  }
 
   return "badge-success"
 }
@@ -353,7 +355,7 @@ function startCountDown(delay) {
   document.getElementById("autoplay-seconds").innerText = currentDelay;
 
   if (currentDelay == 0) {
-    ws.send(JSON.stringify({"autoplay": autoplay}));
+    // ws.send(JSON.stringify({"autoplay": autoplay}));
 
     if (autoplay == false) {
       ws.close();
@@ -380,9 +382,10 @@ function stopAutoplay() {
 
 function stopRun() {
   hideStopControls();
+  showSetupOverlay();
 
-  ws.send(JSON.stringify({"autoplay": autoplay}));
-  ws.close();
+  // ws.send(JSON.stringify({"autoplay": autoplay}));
+  // ws.close();
 }
 
 function resetError() {
@@ -425,8 +428,7 @@ function connectToWebsocket() {
 
   try {
     let open = false;
-    let host = "localhost:" + port;
-    ws = new WebSocket('ws://' + host + '/steps');
+    ws = new WebSocket(`ws://localhost:${port}`);
 
     console.log("Websocket Started.");
 
@@ -436,16 +438,19 @@ function connectToWebsocket() {
       showErrorMessage(`Could not connect to port: ${port}. Make sure the websocket server is running on the selected port.`);
     }
     ws.onopen = function(event) {
-      ws.send(JSON.stringify({"autoplay": autoplay}));
+      // ws.send(JSON.stringify({"autoplay": autoplay}));
+      ws.send(JSON.stringify({"type": "init", "client": "viewer"}));
+      ws.send(JSON.stringify({"type": "start"}));
+
       open = true;
     };
     ws.onclose = function(event) {
       hideLoadingStartButton();
 
-      if (open) {
-        showSetupOverlay();
-        showWarningMessage(`Websocket connection closed.`);
-      }
+      // if (open) {
+      //   showSetupOverlay();
+      //   showWarningMessage(`Websocket connection closed.`);
+      // }
     }
     ws.onmessage = function(event) {
       var message = JSON.parse(event.data);
