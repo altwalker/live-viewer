@@ -62,6 +62,14 @@ altwalker-viewer open
 
 Now, open your web browser and visit: <http://localhost:8000/>.
 
+Please note that unlike the `altwalker walk` command, the `altwalker-viewer walk` command requires the `-m` option to specify the model files for displaying the models correctly.
+
+For example:
+
+```bash
+$ altwalker-viewer walk -m models/main.json -m models/navigation.json steps.json
+```
+
 ## Troubleshooting
 
 If you encounter any issues while using the LiveViewer, consider the following steps:
