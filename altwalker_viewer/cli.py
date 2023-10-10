@@ -139,11 +139,12 @@ def websocket_server(host="127.0.0.1", port=5555):
         server_process = Process(target=start, args=(host, port))
         server_process.start()
 
-    yield server_process
-
-    if server_process is not None:
-        server_process.terminate()
-        server_process.join()
+    try:
+        yield server_process
+    finally:
+        if server_process is not None:
+            server_process.terminate()
+            server_process.join()
 
 
 @click.group(context_settings=CONTEXT_SETTINGS)
