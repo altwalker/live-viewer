@@ -173,7 +173,6 @@ document.addEventListener("DOMContentLoaded", function() {
 var port = null;
 var ws = null;
 
-var autoplay = false;
 var maxDelay = 5;
 var currentDelay = 5;
 
@@ -326,18 +325,6 @@ function updateStatistics(statistics) {
   document.getElementById("statistics-unvisited-vertices").innerText = statistics.totalNumberOfUnvisitedVertices;
 }
 
-function showAutoplayControls() {
-  let controls = document.getElementById("autoplay-controls");
-  controls.classList.add("d-inline-block");
-  controls.classList.remove("d-none");
-}
-
-function hideAutoplayControls() {
-  let controls = document.getElementById("autoplay-controls");
-  controls.classList.remove("d-inline-block");
-  controls.classList.add("d-none");
-}
-
 function showStopControls() {
   let controls = document.getElementById("stop-controls");
   controls.classList.add("d-inline-block");
@@ -350,42 +337,9 @@ function hideStopControls() {
   controls.classList.add("d-none");
 }
 
-function startCountDown(delay) {
-  showAutoplayControls();
-  document.getElementById("autoplay-seconds").innerText = currentDelay;
-
-  if (currentDelay == 0) {
-    // ws.send(JSON.stringify({"autoplay": autoplay}));
-
-    if (autoplay == false) {
-      ws.close();
-    }
-
-    hideAutoplayControls();
-    currentDelay = maxDelay;
-  } else {
-    setTimeout(function() {
-      currentDelay = currentDelay > 0 ? currentDelay - 1 : 0;
-      startCountDown();
-    }, 1000);
-  }
-}
-
-function skipCountDown() {
-  currentDelay = 0;
-}
-
-function stopAutoplay() {
-  autoplay = false;
-  currentDelay = 0;
-}
-
 function stopRun() {
   hideStopControls();
   showSetupOverlay();
-
-  // ws.send(JSON.stringify({"autoplay": autoplay}));
-  // ws.close();
 }
 
 function resetError() {
@@ -418,7 +372,6 @@ function connectToWebsocket() {
   showLoadingStartButton();
 
   port = document.getElementById("port-input").value;
-  autoplay = document.getElementById("autoplay-checkbox").checked;
 
   if (!port) {
     hideLoadingStartButton();
@@ -438,7 +391,6 @@ function connectToWebsocket() {
       showErrorMessage(`Could not connect to port: ${port}. Make sure the websocket server is running on the selected port.`);
     }
     ws.onopen = function(event) {
-      // ws.send(JSON.stringify({"autoplay": autoplay}));
       ws.send(JSON.stringify({"type": "init", "client": "viewer"}));
       ws.send(JSON.stringify({"type": "start"}));
 
@@ -446,11 +398,6 @@ function connectToWebsocket() {
     };
     ws.onclose = function(event) {
       hideLoadingStartButton();
-
-      // if (open) {
-      //   showSetupOverlay();
-      //   showWarningMessage(`Websocket connection closed.`);
-      // }
     }
     ws.onmessage = function(event) {
       var message = JSON.parse(event.data);
@@ -481,11 +428,7 @@ function connectToWebsocket() {
         showStatisticsForm();
 
         updateStatistics(message.statistics);
-        if (autoplay) {
-          startCountDown(maxDelay);
-        } else {
-          showStopControls();
-        }
+        showStopControls();
       }
     }
   } catch(error) {
@@ -494,32 +437,26 @@ function connectToWebsocket() {
   }
 }
 
-window.addEventListener("resize", function(event) {
+window.addEventListener("resize", function() {
   repaintGraph()
 });
 
 document.addEventListener("DOMContentLoaded", function() {
-  document.getElementById("stop-autoplay-button").addEventListener("click", function(event) {
-    stopAutoplay();
-  });
-  document.getElementById("skip-button").addEventListener("click", function(event) {
-    skipCountDown();
-  });
-  document.getElementById("stop-run-button").addEventListener("click", function(event) {
+  document.getElementById("stop-run-button").addEventListener("click", function() {
     stopRun();
   });
 
-  document.getElementById("settings-button").addEventListener("click", function(event) {
+  document.getElementById("settings-button").addEventListener("click", function() {
     showSettingsOverlay();
   });
-  document.getElementById("save-settings-button").addEventListener("click", function(event) {
+  document.getElementById("save-settings-button").addEventListener("click", function() {
     saveSettings();
   });
-  document.getElementById("hide-settings-button").addEventListener("click", function(event) {
+  document.getElementById("hide-settings-button").addEventListener("click", function() {
     hideSettingsOverlay();
   });
 
-  document.getElementById("connect-button").addEventListener("click", function(event) {
+  document.getElementById("connect-button").addEventListener("click", function() {
     connectToWebsocket();
   });
 });
