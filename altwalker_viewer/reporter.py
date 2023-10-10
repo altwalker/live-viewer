@@ -89,4 +89,4 @@ class SyncWebsocketReporter(Reporter):
             trace (:obj:`str`): The traceback.
         """
 
-        # self.websocket.send(json.dumps({"type": "error", "step": step}))
+        self.websocket.send(json.dumps({"type": "error", "step": step, "message": message, "trace": trace}))
