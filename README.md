@@ -67,7 +67,7 @@ Please note that unlike the `altwalker walk` command, the `altwalker-viewer walk
 For example:
 
 ```bash
-$ altwalker-viewer walk -m models/main.json -m models/navigation.json steps.json
+altwalker-viewer walk -m models/main.json -m models/navigation.json steps.json
 ```
 
 ## Troubleshooting
