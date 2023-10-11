@@ -13,23 +13,64 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import asyncio
 import datetime
 import json
 
 from altwalker.reporter import Reporter
+from websockets.sync.client import connect
 
 
-class WebsocketReporter(Reporter):
+class SyncWebsocketReporter(Reporter):
     """This reporter sends the report through a websocket."""
 
-    def __init__(self, websocket):
-        self.websocket = websocket
+    def __init__(self, host="localhost", port=5555, models_json=None):
+        self.host = host
+        self.port = port
+        self.models_json = models_json
+
+    def start(self, message=None):
+        """Report the start of a run.
+
+        Args:
+            message (:obj:`str`): A message.
+        """
+
+        self.websocket = connect(f"ws://{self.host}:{self.port}/")
+        self.websocket.send(json.dumps({"type": "init", "client": "reporter"}))
+        self.websocket.send(json.dumps({"type": "start", "models": self.models_json}))
+
+        print("Waiting for viewer....")
+        data = self.websocket.recv()
+        event = json.loads(data)
+        assert event["type"] == "start"
+
+    def end(self, message=None, statistics=None, status=None):
+        """Report the end of a run.
+
+        Args:
+            message (:obj:`str`): A message.
+        """
+
+        self.websocket.send(json.dumps({"type": "end", "statistics": statistics, "status": status}))
+        self.websocket.close()
 
     def step_start(self, step):
-        asyncio.ensure_future(self.websocket.send(json.dumps({"step": step})))
+        """Report the starting execution of a step.
+
+        Args:
+            step (:obj:`dict`): The step that will be executed next.
+        """
+
+        self.websocket.send(json.dumps({"type": "step-start", "step": step}))
 
     def step_end(self, step, result):
+        """Report the result of the step execution.
+
+        Args:
+            step (:obj:`dict`): The step just executed.
+            result (:obj:`dict`): The result of the step.
+        """
+
         result["id"] = step.get("id", None)
 
         if step.get("modelName", None):
@@ -37,4 +78,15 @@ class WebsocketReporter(Reporter):
         else:
             result["output"] = f"[{datetime.datetime.now()}] {step['name']}\n{result['output']}"
 
-        asyncio.ensure_future(self.websocket.send(json.dumps({"result": result})))
+        self.websocket.send(json.dumps({"type": "step-end", "result": result}))
+
+    def error(self, step, message, trace=None):
+        """Report an unexpected error.
+
+        Args:
+            step (:obj:`dict`): The step executed when the error occurred.
+            message (:obj:`str`): The message of the error.
+            trace (:obj:`str`): The traceback.
+        """
+
+        self.websocket.send(json.dumps({"type": "error", "step": step, "message": message, "trace": trace}))

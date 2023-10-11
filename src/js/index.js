@@ -16,13 +16,13 @@
 */
 
 // Models
-var visualizer = new ModelVisualizer({container: "visualizer", editMode: false});;
+const visualizer = new ModelVisualizer({container: "visualizer", editMode: false});;
+
+const scale = d3.scaleLinear().range([0.3, 0.8]).domain([0, 5]).clamp(true);
+const getColor = (d) => d3.interpolateYlGn(scale(d))
 
 var oldStepId = null;
-var scale = d3.scaleLinear().range([0.3, 0.8]).domain([0, 5]).clamp(true);
-var color = (d) => d3.interpolateYlGn(scale(d))
-
-var count = {}
+var stepCount = {}
 var failedStep = {}
 
 function displayModels(models) {
@@ -33,12 +33,10 @@ function displayModels(models) {
   repaintEdges();
 
   failedStep = {}
-  count = {}
+  stepCount = {}
 }
 
 function setGraphLayoutOptions(options) {
-  console.log(options);
-
   const graphDirectionsMap = {
     "Top-Bottom": "TB",
     "Bottom-Top": "BT",
@@ -47,11 +45,11 @@ function setGraphLayoutOptions(options) {
   }
 
   const layoutOptions = {
-    "rankdir": graphDirectionsMap[options["graphDirection"]],
-    "nodesep": options["vertexSeparation"],
-    "edgesep": options["edgeSeparation"],
-    "ranksep": options["rankSeparation"]
-  }
+    rankdir: graphDirectionsMap[options.graphDirection],
+    nodesep: options.vertexSeparation,
+    edgesep: options.edgeSeparation,
+    ranksep: options.rankSeparation,
+  };
 
   visualizer.setGraphLayoutOptions(layoutOptions);
 }
@@ -59,7 +57,7 @@ function setGraphLayoutOptions(options) {
 function repaintGraph() {
   visualizer.repaint();
 
-  Object.keys(count).forEach(function (id) {
+  Object.keys(stepCount).forEach(function (id) {
     drawStep(id, false);
   });
 
@@ -69,19 +67,16 @@ function repaintGraph() {
 }
 
 function repaintEdges() {
-  // TODO: Remove the Model-Visualizer reset the color of the edge on repaint.
-
-  Object.keys(count).forEach(function (id) {
-    d3.select("svg g#" + id + " path")
-      .style("stroke", "#7f8c8d");
+  Object.keys(stepCount).forEach(function (id) {
+    d3.select(`svg g#${id} path`).style("stroke", "#7f8c8d");
   });
 }
 
 function updateStep(step) {
-  var id = step["id"] || null;
-  var visits = count[id] || 0;
+  const id = step["id"] || null;
+  const visits = stepCount[id] || 0;
 
-  count[id] = visits + 1;
+  stepCount[id] = visits + 1;
 
   if (oldStepId) {
     drawOldStep(oldStepId);
@@ -95,17 +90,17 @@ function updateStep(step) {
 }
 
 function drawStep(id, current) {
-  d3.select("svg g#" + id + " rect")
-    .style("fill", color(count[id]))
-    .style("stroke", color(count[id]));
+  d3.select(`svg g#${id} rect`)
+    .style("fill", getColor(stepCount[id]))
+    .style("stroke", getColor(stepCount[id]));
 
-  d3.select("svg g#" + id + " path")
-    .style("stroke", color(count[id]))
+  d3.select(`svg g#${id} path`)
+    .style("stroke", getColor(stepCount[id]))
 
   if (current) {
-    d3.select("svg g#" + id)
-    .classed("current-node", true)
-    .classed("current-edge", true);
+    d3.select(`svg g#${id}`)
+      .classed("current-node", true)
+      .classed("current-edge", true);
 
     // Bold edges labels
     d3.selectAll("svg .edgeLabels tspan").attr("class", (d) => d.name == id ? "current-label" : "");
@@ -113,7 +108,7 @@ function drawStep(id, current) {
 }
 
 function drawOldStep(id) {
-  d3.select("svg g#" + id)
+  d3.select(`svg g#${id}`)
     .classed("current-node", false)
     .classed("current-edge", false);
 }
@@ -121,78 +116,92 @@ function drawOldStep(id) {
 function updateFailedStep(step) {
   failedStep = step;
 
-  d3.select("svg g#" + step.id + " rect")
+  d3.select(`svg g#${step.id} rect`)
     .style("fill", "#c0392b")
     .style("stroke", "#c0392b");
 
-  d3.select("svg g#" + step.id + " path")
+  d3.select(`svg g#${step.id} path`)
     .style("stroke", "#c0392b")
 }
 
-// Resize
-var dragging = false;
-
-function dragstart(event) {
-  event.preventDefault();
-  dragging = true;
-}
-
-function dragmove(event) {
-  if (dragging) {
-    var percentage = (event.pageX / window.innerWidth) * 100;
-
-    if (percentage > 30 && percentage < 70) {
-      var rightPercentage = 100 - 0.05 - percentage;
-
-      document.getElementById("left").style.width = percentage + "%";
-      document.getElementById("right").style.width = rightPercentage + "%";
-    }
-  }
-}
-
-function dragend() {
-  if (dragging) {
-    repaintGraph();
-  }
-
-  dragging = false;
-}
-
-document.addEventListener("DOMContentLoaded", function() {
-  document.getElementById("dragbar").addEventListener("mousedown", function(e) { dragstart(e); });
-  document.getElementById("dragbar").addEventListener("touchstart", function(e) { dragstart(e); });
-
-  window.addEventListener("mousemove", function(e) { dragmove(e); });
-  window.addEventListener("touchmove", function(e) { dragmove(e); });
-  window.addEventListener("mouseup", dragend);
-  window.addEventListener("touchend", dragend);
+window.addEventListener("resize", function() {
+  repaintGraph()
 });
 
-// Scripts
+// Create the drag bar
+function createDragHandler() {
+  let dragging = false;
 
-var port = null;
-var ws = null;
+  function dragstart(event) {
+    event.preventDefault();
+    dragging = true;
+  }
 
-var autoplay = false;
-var maxDelay = 5;
-var currentDelay = 5;
+  function dragmove(event) {
+    if (dragging) {
+      const percentage = (event.pageX / window.innerWidth) * 100;
 
-function percentageColor(percentage) {
-  if (percentage < 50)
-    return "badge-danger"
+      if (percentage > 30 && percentage < 70) {
+        const rightPercentage = 100 - 0.05 - percentage;
 
-  if (percentage < 80)
-    return "badge-warning"
+        document.getElementById("left").style.width = `${percentage}%`;
+        document.getElementById("right").style.width = `${rightPercentage}%`;
+      }
+    }
+  }
 
-  return "badge-success"
+  function dragend() {
+    if (dragging) {
+      repaintGraph();
+    }
+
+    dragging = false;
+  }
+
+  return { dragstart, dragmove, dragend };
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  const dragHandler = createDragHandler();
+
+  const dragBar = document.getElementById("drag-bar");
+  dragBar.addEventListener("mousedown", dragHandler.dragstart);
+  dragBar.addEventListener("touchstart", dragHandler.dragstart);
+
+  window.addEventListener("mousemove", dragHandler.dragmove);
+  window.addEventListener("touchmove", dragHandler.dragmove);
+  window.addEventListener("mouseup", dragHandler.dragend);
+  window.addEventListener("touchend", dragHandler.dragend);
+});
+
+// UI
+const CSS_CLASSES = {
+  HIDE: "d-none",
+  SHOW: "show",
+  BADGE: "badge",
+  BADGE_DANGER: "badge-danger",
+  BADGE_WARNING: "badge-warning",
+  BADGE_SUCCESS: "badge-success",
+};
+
+function getPercentageClass(percentage) {
+  if (percentage < 50) {
+    return CSS_CLASSES.BADGE_DANGER;
+  }
+
+  if (percentage < 80) {
+    return CSS_CLASSES.BADGE_WARNING;
+  }
+
+  return CSS_CLASSES.BADGE_SUCCESS;
 }
 
 function showSetupOverlay() {
-  document.getElementById("setup-overlay").classList.remove("d-none");
+  document.getElementById("setup-overlay").classList.remove(CSS_CLASSES.HIDE);
 }
 
 function hideSetupOverlay() {
-  document.getElementById("setup-overlay").classList.add("d-none");
+  document.getElementById("setup-overlay").classList.add(CSS_CLASSES.HIDE);
 
   hideErrorMessage();
   hideWarningMessage();
@@ -200,20 +209,20 @@ function hideSetupOverlay() {
 
 function showErrorMessage(message) {
   let errorAlert = document.getElementById("error-alert");
-  errorAlert.classList.remove("d-none");
-  errorAlert.classList.add("show");
+  errorAlert.classList.remove(CSS_CLASSES.HIDE);
+  errorAlert.classList.add(CSS_CLASSES.SHOW);
 
   document.getElementById("error-message").textContent = message;
 }
 
 function hideErrorMessage() {
-  document.getElementById("error-alert").classList.add("d-none");
+  document.getElementById("error-alert").classList.add(CSS_CLASSES.HIDE);
 }
 
 function showWarningMessage(message) {
   let warningAlert = document.getElementById("warning-alert");
-  warningAlert.classList.remove("d-none");
-  warningAlert.classList.add("show");
+  warningAlert.classList.remove(CSS_CLASSES.HIDE);
+  warningAlert.classList.add(CSS_CLASSES.SHOW);
 
   document.getElementById("warning-message").textContent = message;
 
@@ -221,15 +230,19 @@ function showWarningMessage(message) {
 }
 
 function hideWarningMessage() {
-  document.getElementById("warning-alert").classList.add("d-none");
+  document.getElementById("warning-alert").classList.add(CSS_CLASSES.HIDE);
 }
 
 function showPortError() {
   document.getElementById("port-input").classList.add("is-invalid");
 }
 
+function hidePortError() {
+  document.getElementById("port-input").classList.remove("is-invalid");
+}
+
 function showCurrentStepForm() {
-  document.getElementById("current-step-form").classList.remove("d-none");
+  document.getElementById("current-step-form").classList.remove(CSS_CLASSES.HIDE);
 }
 
 function hideCurrentStepForm() {
@@ -274,11 +287,11 @@ function updateStepStart(step) {
 
 function updateStepEnd(result) {
   let outputTextArea = document.getElementById("output-input");
-  let autorscroll = document.getElementById("autoscroll-checkbox").checked;
+  let autoScroll = document.getElementById("auto-scroll-checkbox").checked;
 
   outputTextArea.value += result.output;
 
-  if (autorscroll) {
+  if (autoScroll) {
     outputTextArea.scrollTop = outputTextArea.scrollHeight;
   }
 
@@ -290,99 +303,55 @@ function updateStepEnd(result) {
   }
 }
 
+function updateStatus(status) {
+  let statusElement = document.getElementById("statistics-status")
+  statusElement.innerText = status ? "Passed" : "Failed";
+  statusElement.classList.add(CSS_CLASSES.BADGE)
+  statusElement.classList.add(status ? CSS_CLASSES.BADGE_SUCCESS : CSS_CLASSES.BADGE_DANGER);
+  statusElement.classList.remove(status ? CSS_CLASSES.BADGE_DANGER : CSS_CLASSES.BADGE_SUCCESS);
+}
+
 function updateStatistics(statistics) {
-  let status = document.getElementById("statistics-status")
-  status.innerText = statistics.status ? "Passed" : "Failed";
-  status.classList.add("badge")
-  status.classList.add(statistics.status ? "badge-success" : "badge-danger");
-  status.classList.remove(statistics.status ? "badge-danger" : "badge-success");
-
-
   document.getElementById("statistics-number-of-models").innerText = statistics.totalNumberOfModels;
   document.getElementById("statistics-completed-models").innerText = statistics.totalCompletedNumberOfModels;
   document.getElementById("statistics-failed-models").innerText = statistics.totalFailedNumberOfModels;
   document.getElementById("statistics-incomplete-models").innerText = statistics.totalIncompleteNumberOfModels;
   document.getElementById("statistics-not-executed-models").innerText = statistics.totalNotExecutedNumberOfModels;
 
-
   let edgeCoverage = document.getElementById("statistics-edge-coverage");
-  edgeCoverage.innerText = statistics.edgeCoverage + "%";
-  edgeCoverage.classList.remove(...["badge-danger", "badge-warning", "badge-success"]);
-  edgeCoverage.classList.add(...["badge", percentageColor(statistics.edgeCoverage)]);
+  edgeCoverage.innerText = `${statistics.edgeCoverage}%`;
+  edgeCoverage.classList.remove(...[CSS_CLASSES.BADGE_DANGER, CSS_CLASSES.BADGE_WARNING, CSS_CLASSES.BADGE_SUCCESS]);
+  edgeCoverage.classList.add(...[CSS_CLASSES.BADGE, getPercentageClass(statistics.edgeCoverage)]);
 
   document.getElementById("statistics-number-of-edges").innerText = statistics.totalNumberOfEdges;
   document.getElementById("statistics-visited-edges").innerText = statistics.totalNumberOfVisitedEdges;
   document.getElementById("statistics-unvisited-edges").innerText = statistics.totalNumberOfUnvisitedEdges;
 
   let vertexCoverage = document.getElementById("statistics-vertex-coverage");
-  vertexCoverage.innerText = statistics.vertexCoverage + "%";
-  vertexCoverage.classList.remove(...["badge-danger", "badge-warning", "badge-success"]);
-  vertexCoverage.classList.add(...["badge", percentageColor(statistics.vertexCoverage)]);
+  vertexCoverage.innerText = `${statistics.vertexCoverage}%`;
+  vertexCoverage.classList.remove(...[CSS_CLASSES.BADGE_DANGER, CSS_CLASSES.BADGE_WARNING, CSS_CLASSES.BADGE_SUCCESS]);
+  vertexCoverage.classList.add(...[CSS_CLASSES.BADGE, getPercentageClass(statistics.vertexCoverage)]);
 
   document.getElementById("statistics-number-of-vertices").innerText = statistics.totalNumberOfVertices;
   document.getElementById("statistics-visited-vertices").innerText = statistics.totalNumberOfVisitedVertices;
   document.getElementById("statistics-unvisited-vertices").innerText = statistics.totalNumberOfUnvisitedVertices;
 }
 
-function showAutoplayControls() {
-  let controls = document.getElementById("autoplay-controls");
-  controls.classList.add("d-inline-block");
-  controls.classList.remove("d-none");
+function showStopButton() {
+  let controls = document.getElementById("stop-run-button");
+  controls.classList.add(CSS_CLASSES.SHOW);
+  controls.classList.remove(CSS_CLASSES.HIDE);
 }
 
-function hideAutoplayControls() {
-  let controls = document.getElementById("autoplay-controls");
-  controls.classList.remove("d-inline-block");
-  controls.classList.add("d-none");
-}
-
-function showStopControls() {
-  let controls = document.getElementById("stop-controls");
-  controls.classList.add("d-inline-block");
-  controls.classList.remove("d-none");
-}
-
-function hideStopControls() {
-  let controls = document.getElementById("stop-controls");
-  controls.classList.remove("d-inline-block");
-  controls.classList.add("d-none");
-}
-
-function startCountDown(delay) {
-  showAutoplayControls();
-  document.getElementById("autoplay-seconds").innerText = currentDelay;
-
-  if (currentDelay == 0) {
-    ws.send(JSON.stringify({"autoplay": autoplay}));
-
-    if (autoplay == false) {
-      ws.close();
-    }
-
-    hideAutoplayControls();
-    currentDelay = maxDelay;
-  } else {
-    setTimeout(function() {
-      currentDelay = currentDelay > 0 ? currentDelay - 1 : 0;
-      startCountDown();
-    }, 1000);
-  }
-}
-
-function skipCountDown() {
-  currentDelay = 0;
-}
-
-function stopAutoplay() {
-  autoplay = false;
-  currentDelay = 0;
+function hideStopButton() {
+  let controls = document.getElementById("stop-run-button");
+  controls.classList.remove(CSS_CLASSES.SHOW);
+  controls.classList.add(CSS_CLASSES.HIDE);
 }
 
 function stopRun() {
-  hideStopControls();
-
-  ws.send(JSON.stringify({"autoplay": autoplay}));
-  ws.close();
+  hideStopButton();
+  showSetupOverlay();
 }
 
 function resetError() {
@@ -410,111 +379,87 @@ function saveSettings() {
   hideSettingsOverlay();
 }
 
-function connectToWebsocket() {
-  console.log("Connect to websocket...");
+function connectToWebSocket() {
   showLoadingStartButton();
 
-  port = document.getElementById("port-input").value;
-  autoplay = document.getElementById("autoplay-checkbox").checked;
+  let port = document.getElementById("port-input").value;
 
   if (!port) {
     hideLoadingStartButton();
     showPortError();
-    return
+    return;
+  } else {
+    hidePortError();
   }
 
   try {
-    let open = false;
-    let host = "localhost:" + port;
-    ws = new WebSocket('ws://' + host + '/steps');
+    const ws = new WebSocket(`ws://localhost:${port}`);
 
-    console.log("Websocket Started.");
-
-    ws.onerror = function(event) {
-      console.log("Error", event);
+    ws.onerror = (event) => {
+      console.log("WebSocketError:", event);
       showSetupOverlay();
       showErrorMessage(`Could not connect to port: ${port}. Make sure the websocket server is running on the selected port.`);
-    }
-    ws.onopen = function(event) {
-      ws.send(JSON.stringify({"autoplay": autoplay}));
-      open = true;
     };
-    ws.onclose = function(event) {
-      hideLoadingStartButton();
-
-      if (open) {
-        showSetupOverlay();
-        showWarningMessage(`Websocket connection closed.`);
-      }
-    }
-    ws.onmessage = function(event) {
-      var message = JSON.parse(event.data);
-
-      if (message.models) {
-        resetError();
-        resetOutput();
-        hideSetupOverlay();
-        hideLoadingStartButton();
-
-        showCurrentStepForm();
-        hideStatisticsForm();
-
-        displayModels(message.models);
-      }
-
-      if (message.step) {
-        updateStep(message.step);
-        updateStepStart(message.step);
-      }
-
-      if (message.result) {
-        updateStepEnd(message.result);
-      }
-
-      if (message.statistics) {
-        hideCurrentStepForm();
-        showStatisticsForm();
-
-        updateStatistics(message.statistics);
-        if (autoplay) {
-          startCountDown(maxDelay);
-        } else {
-          showStopControls();
-        }
-      }
-    }
+    ws.onopen = () => {
+      ws.send(JSON.stringify({"type": "init", "client": "viewer"}));
+      ws.send(JSON.stringify({"type": "start"}));
+    };
+    ws.onclose = () => hideLoadingStartButton();
+    ws.onmessage = (event) => handleWebSocketMessage(ws, JSON.parse(event.data));
   } catch(error) {
     hideLoadingStartButton();
     showErrorMessage(`Unknown Error.`);
   }
 }
 
-window.addEventListener("resize", function(event) {
-  repaintGraph()
-});
+const MESSAGE_TYPES = {
+  START: "start",
+  END: "end",
+  STEP_START: "step-start",
+  STEP_END: "step-end"
+}
+
+function handleWebSocketMessage(ws, message) {
+  const type = message.type;
+
+  if (type == MESSAGE_TYPES.START) {
+    resetError();
+    resetOutput();
+    hideSetupOverlay();
+    hideLoadingStartButton();
+
+    showCurrentStepForm();
+    hideStatisticsForm();
+
+    displayModels(message.models);
+  }
+
+  if (type == MESSAGE_TYPES.STEP_START) {
+    updateStep(message.step);
+    updateStepStart(message.step);
+  }
+
+  if (type == MESSAGE_TYPES.STEP_END) {
+    updateStepEnd(message.result);
+  }
+
+  if (type == MESSAGE_TYPES.END) {
+    hideCurrentStepForm();
+    showStatisticsForm();
+
+    updateStatus(message.status);
+    updateStatistics(message.statistics);
+
+    showStopButton();
+
+    ws.close();
+  }
+}
 
 document.addEventListener("DOMContentLoaded", function() {
-  document.getElementById("stop-autoplay-button").addEventListener("click", function(event) {
-    stopAutoplay();
-  });
-  document.getElementById("skip-button").addEventListener("click", function(event) {
-    skipCountDown();
-  });
-  document.getElementById("stop-run-button").addEventListener("click", function(event) {
-    stopRun();
-  });
-
-  document.getElementById("settings-button").addEventListener("click", function(event) {
-    showSettingsOverlay();
-  });
-  document.getElementById("save-settings-button").addEventListener("click", function(event) {
-    saveSettings();
-  });
-  document.getElementById("hide-settings-button").addEventListener("click", function(event) {
-    hideSettingsOverlay();
-  });
-
-  document.getElementById("connect-button").addEventListener("click", function(event) {
-    connectToWebsocket();
-  });
+  document.getElementById("stop-run-button").addEventListener("click", stopRun);
+  document.getElementById("settings-button").addEventListener("click", showSettingsOverlay);
+  document.getElementById("save-settings-button").addEventListener("click", saveSettings);
+  document.getElementById("hide-settings-button").addEventListener("click", hideSettingsOverlay);
+  document.getElementById("connect-button").addEventListener("click", connectToWebSocket);
 });

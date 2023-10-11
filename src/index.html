@@ -39,28 +39,12 @@
                 AltWalker's Live Viewer
             </a>
             <div>
-                <div id="autoplay-controls" class="d-none mb-0 mx-3 px-3 border-right">
-                    <span class="mx-5 autoplay-text">
-                        <span class="spinner-border spinner-border-sm mx-1" role="status" aria-hidden="true"></span>
-                        <span id="autoplay-seconds">5</span> seconds...
-                    </span>
-
-                    <a id="stop-autoplay-button" data-toggle="tooltip" data-placement="bottom" title="Stop" class="cursor-pointer">
-                        <img src="img/square.svg" width="20" height="20" class="mx-1" alt="stop" />
-                    </a>
-                    <a id="skip-button" data-toggle="tooltip" data-placement="bottom" title="Skip" class="cursor-pointer">
-                        <img src="img/skip-forward.svg" width="20" height="20" class="mx-1" alt="skip forward" />
-                    </a>
-                </div>
-
-                <div id="stop-controls" class="d-none mb-0 mx-3 px-3 border-right">
-                    <a id="stop-run-button" data-toggle="tooltip" data-placement="bottom" title="Stop" class="cursor-pointer">
-                        <img src="img/square.svg" width="20" height="20" class="mx-1" alt="stop" />
-                    </a>
-                </div>
-
                 <div class="d-inline-block mb-0">
-                    <a id="settings-button" data-toggle="tooltip" data-placement="bottom" title="Settings" class="cursor-pointer">
+                    <a id="stop-run-button" data-toggle="tooltip" data-placement="bottom" title="Stop" class="d-none border-right pr-3 cursor-pointer">
+                        <img src="img/square.svg" width="20" height="20" class="mx-1" alt="stop" />
+                    </a>
+
+                    <a id="settings-button" data-toggle="tooltip" data-placement="bottom" title="Settings" class="cursor-pointer ml-3">
                         <img src="img/settings.svg" width="20" height="20" class="mx-1" alt="settings" />
                     </a>
                 </div>
@@ -73,7 +57,7 @@
                     <div id="visualizer"></div>
                 </div>
 
-                <div id="dragbar" class="h-full">
+                <div id="drag-bar" class="h-full">
                 </div>
 
                 <div id="right" class="h-full bg-light px-3 py-3 border-left overflow-y-scroll">
@@ -213,8 +197,8 @@
                             </div>
 
                             <div class="form-group form-check">
-                                <input type="checkbox" class="form-check-input" id="autoscroll-checkbox" checked>
-                                <label class="form-check-label" for="autoscroll-checkbox">Autoscroll</label>
+                                <input type="checkbox" class="form-check-input" id="auto-scroll-checkbox" checked>
+                                <label class="form-check-label" for="auto-scroll-checkbox">Autoscroll</label>
                             </div>
                         </form>
 
@@ -267,11 +251,6 @@
                                     <div class="invalid-feedback">
                                         Please input the port used by the websocket server.
                                     </div>
-                                </div>
-
-                                <div class="form-group form-check">
-                                    <input type="checkbox" class="form-check-input" id="autoplay-checkbox">
-                                    <label class="form-check-label" for="autoplay-checkbox">Auto-replay</label>
                                 </div>
 
                                 <button type="button" id="connect-button" class="btn btn-primary">

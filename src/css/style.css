@@ -84,7 +84,7 @@ select:focus {
     width: calc(30% - 0.025%);
 }
 
-#dragbar {
+#drag-bar {
     width: 0.05%;
     cursor: col-resize;
 
