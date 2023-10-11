@@ -27,10 +27,10 @@ from altwalker.executor import get_supported_executors
 from altwalker.generate import get_supported_languages
 from altwalker.loader import get_supported_loaders
 
-from . import syncwalker
+from . import walker
 from .__version__ import VERSION
 from .client import is_server_running
-from .syncserver import start
+from .server import start
 
 CONTEXT_SETTINGS = dict(help_option_names=["--help", "-h"])
 
@@ -196,7 +196,7 @@ def online(test_package, models, port, host, **options):
     """Starts the websocket server for an online run."""
 
     with websocket_server(host=host, port=port):
-        syncwalker.online(test_package, models, **options)
+        walker.online(test_package, models, **options)
 
 
 @cli.command()
@@ -216,7 +216,7 @@ def walk(test_package, steps_path, host, port, **options):
         steps = json.load(f)
 
     with websocket_server(host=host, port=port):
-        syncwalker.walk(test_package, steps, **options)
+        walker.walk(test_package, steps, **options)
 
 
 @cli.command("open")
