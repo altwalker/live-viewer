@@ -405,7 +405,7 @@ function connectToWebSocket() {
       ws.send(JSON.stringify({"type": "start"}));
     };
     ws.onclose = () => hideLoadingStartButton();
-    ws.onmessage = (event) => handleWebSocketMessage(JSON.parse(event.data));
+    ws.onmessage = (event) => handleWebSocketMessage(ws, JSON.parse(event.data));
   } catch(error) {
     hideLoadingStartButton();
     showErrorMessage(`Unknown Error.`);
@@ -419,7 +419,7 @@ const MESSAGE_TYPES = {
   STEP_END: "step-end"
 }
 
-function handleWebSocketMessage(message) {
+function handleWebSocketMessage(ws, message) {
   const type = message.type;
 
   if (type == MESSAGE_TYPES.START) {
@@ -451,6 +451,8 @@ function handleWebSocketMessage(message) {
     updateStatistics(message.statistics);
 
     showStopButton();
+
+    ws.close();
   }
 }
 

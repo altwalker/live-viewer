@@ -15,10 +15,13 @@
 
 import json
 import time
+import logging
 
 from websockets.sync.server import serve
 
 from .__version__ import VERSION
+
+logger = logging.getLogger(__name__)
 
 CONNECTED = {
     "reporter": None,
