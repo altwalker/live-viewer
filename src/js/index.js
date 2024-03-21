@@ -379,6 +379,7 @@ function saveSettings() {
   hideSettingsOverlay();
 }
 
+// WebSocket Client
 function connectToWebSocket() {
   showLoadingStartButton();
 
