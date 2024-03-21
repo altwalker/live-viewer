@@ -1,9 +1,8 @@
 import json
 
-from websockets.sync.client import connect
-
-from altwalker_viewer.client import get_server_status
 from altwalker_viewer.__version__ import VERSION
+from altwalker_viewer.client import get_server_status
+from websockets.sync.client import connect
 
 
 def test_status():

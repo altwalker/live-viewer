@@ -1,7 +1,6 @@
 import time
 
 import pytest
-
 from altwalker_viewer.cli import websocket_server
 from altwalker_viewer.client import is_server_running
 
