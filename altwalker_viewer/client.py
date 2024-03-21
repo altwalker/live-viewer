@@ -13,36 +13,69 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Simple websocket client used for testing."""
+"""Provides a simple WebSocket client for debugging purposes and various other utility functions."""
 
 import json
+import logging
 
 from websockets.sync.client import connect
 
 
+logger = logging.getLogger(__name__)
+
+
 def get_server_status(host="127.0.0.1", port=5555):
+    """Get the status of the WebSocket server.
+
+    Args:
+        host (str): The hostname or IP address of the WebSocket server. Defaults to ``127.0.0.1``.
+        port (int): The port number of the WebSocket server. Defaults to ``5555``.
+
+    Returns:
+        dict: A dictionary containing the status of the WebSocket server. If the server is running,
+              it returns {"status": "RUNNING"}. If the server is not running, it returns {"status": "UNKNOWN"}.
+
+    """
+
     try:
         websocket = connect(f"ws://{host}:{port}/")
         websocket.send(json.dumps({"type": "init", "client": "status"}))
         message = websocket.recv()
         return json.loads(message)
     except ConnectionRefusedError:
+        logger.error("Connection refused.", exc_info=1)
         return {"status": "UNKNOWN"}
 
 
 def is_server_running(host="127.0.0.1", port=5555):
+    """Check if a WebSocket server is running.
+
+    Args:
+        host (str): The hostname or IP address of the WebSocket server. Defaults to ``127.0.0.1``.
+        port (int): The port number of the WebSocket server. Defaults to ``5555``.
+
+    Returns:
+        bool: ``True`` if a WebSocket server is running, ``False`` otherwise.
+
+    """
+
     json_status = get_server_status(host=host, port=port)
     return json_status["status"] == "RUNNING"
 
 
 class EchoViewer:
-    """Test websocket client."""
+    """WebSocket client designed for debugging purposes.
+
+    This WebSocket client is intended for debugging purposes and is used to test WebSocket connections.
+    It echoes back any received messages.
+
+    """
 
     def __init__(self, host="127.0.0.1", port=5555):
         self.websocket = connect(f"ws://{host}:{port}/")
         self.websocket.send(json.dumps({"type": "init", "client": "viewer"}))
 
-    def start(self):
+    def run(self):
         self.websocket.send(json.dumps({"type": "start"}))
 
         print("Waiting for reporter....")
@@ -57,7 +90,10 @@ class EchoViewer:
             print("-" * 30)
             print(json.dumps(event, indent=2))
 
+            if event["type"] == "end":
+                self.websocket.close()
+
 
 if __name__ == "__main__":
     client = EchoViewer()
-    client.start()
+    client.run()
