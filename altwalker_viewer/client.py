@@ -20,8 +20,25 @@ import logging
 
 from websockets.sync.client import connect
 
-
 logger = logging.getLogger(__name__)
+
+def _echo_json(json_string):
+    """Prints a JSON string in a human-readable format.
+
+    Args:
+        json_string (str): The JSON string to be pretty-printed.
+
+    """
+
+    try:
+        from rich.console import Console
+        console = Console()
+
+        console.print_json(json_string)
+        console.print("-" * console.size[0])
+    except Exception as e:
+        print(json.dumps(json_string, indent=2))
+        print("-" * 80)
 
 
 def get_server_status(host="127.0.0.1", port=5555):
@@ -87,8 +104,7 @@ class EchoViewer:
         for message in self.websocket:
             event = json.loads(message)
 
-            print("-" * 30)
-            print(json.dumps(event, indent=2))
+            _echo_json(message)
 
             if event["type"] == "end":
                 self.websocket.close()
