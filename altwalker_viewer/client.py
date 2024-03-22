@@ -22,6 +22,7 @@ from websockets.sync.client import connect
 
 logger = logging.getLogger(__name__)
 
+
 def _echo_json(json_string):
     """Prints a JSON string in a human-readable format.
 
@@ -36,7 +37,7 @@ def _echo_json(json_string):
 
         console.print_json(json_string)
         console.print("-" * console.size[0])
-    except Exception as e:
+    except Exception:
         print(json.dumps(json_string, indent=2))
         print("-" * 80)
 
