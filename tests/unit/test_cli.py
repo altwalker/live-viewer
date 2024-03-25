@@ -1,8 +1,7 @@
 import pytest
-from click.testing import CliRunner
-
 from altwalker_viewer.__version__ import VERSION
 from altwalker_viewer.cli import cli, online, open_frontend, serve, walk
+from click.testing import CliRunner
 
 
 def test_version():
