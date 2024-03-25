@@ -1,8 +1,20 @@
 import json
+import time
 
+import pytest
 from altwalker_viewer.__version__ import VERSION
-from altwalker_viewer.client import get_server_status
+from altwalker_viewer.cli import websocket_server
+from altwalker_viewer.client import get_server_status, is_server_running
 from websockets.sync.client import connect
+
+
+@pytest.fixture(scope="module", autouse=True)
+def test_server():
+    with websocket_server() as server_process:
+        while not is_server_running():
+            time.sleep(0.1)
+
+        yield server_process
 
 
 def test_status():
