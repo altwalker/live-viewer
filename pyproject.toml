@@ -50,6 +50,9 @@ altwalker-viewer = "altwalker_viewer.cli:cli"
 version = {attr = "altwalker_viewer.__version__.VERSION"}
 dependencies = {file = "requirements.txt"}
 
+[project.optional-dependencies]
+debug = ["rich"]
+
 [tool.setuptools]
 include-package-data = true
 
