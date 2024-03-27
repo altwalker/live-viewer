@@ -133,6 +133,17 @@ npm run start
 pip install -e .
 ```
 
+### Community
+
+For help, discussion about best practices, sharing ideas, projects, or any other conversation that benefits from being searchable:
+
+* [Discuss AltWalker on GitHub](https://github.com/orgs/altwalker/discussions)
+* [Google Group](https://groups.google.com/g/altwalker)
+
+For casual chit-chat with us or with other members of the community: 
+
+* [Gitter Chat Room](https://groups.google.com/g/altwalker)
+
 ## License
 
 This project is licensed under the [GNU General Public License v3.0](https://github.com/altwalker/live-viewer/blob/main/LICENSE).
