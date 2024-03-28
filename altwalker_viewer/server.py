@@ -30,6 +30,7 @@ CONNECTED = {
     "viewer": None
 }
 
+
 def health_check(websocket, request):
     if request.path == "/healthz":
         return Response(http.HTTPStatus.OK, "OK", datastructures.Headers([]), b"OK\n")
