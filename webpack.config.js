@@ -2,6 +2,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const WorkboxPlugin = require('workbox-webpack-plugin')
 const path = require('path')
+const webpack = require('webpack')
+
+const packageJson = require('./package.json');
+const version = packageJson.version
 
 const title = 'AltWalker\'s Live Viewer: A real-time viewer for AltWalker test runs.'
 const description = 'This application provides real-time visualization for your AltWalker test runs, allowing you to gain deeper insights into test execution, track progress, and identify potential issues with ease.'
@@ -26,6 +30,9 @@ const config = {
     ]
   },
   plugins: [
+    new webpack.DefinePlugin({
+      VERSION: JSON.stringify(version)
+    }),
     new HtmlWebpackPlugin({
       template: './src/index.html',
       favicon: './src/favicon.ico',

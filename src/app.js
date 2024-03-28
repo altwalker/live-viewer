@@ -20,6 +20,8 @@ require('./css/style.css');
 
 require('./js/index.js');
 
+console.log("AltTester\'s Live Viewer v" + VERSION)
+
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./service-worker.js').then(registration => {

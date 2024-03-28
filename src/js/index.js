@@ -26,8 +26,6 @@ var stepCount = {}
 var failedStep = {}
 
 function displayModels(models) {
-  console.log("Update Graph...");
-
   visualizer.setModels(models);
   visualizer.repaint();
   repaintEdges();
