@@ -13,11 +13,13 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+import http
 import json
 import logging
 import time
 
-from websockets.sync.server import serve
+from websockets.http11 import datastructures
+from websockets.sync.server import Response, serve
 
 from .__version__ import VERSION
 
@@ -27,6 +29,12 @@ CONNECTED = {
     "reporter": None,
     "viewer": None
 }
+
+def health_check(websocket, request):
+    if request.path == "/healthz":
+        return Response(http.HTTPStatus.OK, "OK", datastructures.Headers([]), b"OK\n")
+    if request.path == "/versionz":
+        return Response(http.HTTPStatus.OK, "OK", datastructures.Headers([]), VERSION.encode())
 
 
 def reporter_handler(websocket):
@@ -82,7 +90,7 @@ def handler(websocket):
 
 
 def start(host="localhost", port=5555):
-    with serve(handler, host=host, port=port) as server:
+    with serve(handler, host=host, port=port, process_request=health_check) as server:
         print("Starting websocket server...")
         server.serve_forever()
 

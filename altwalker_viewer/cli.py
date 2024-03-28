@@ -29,8 +29,8 @@ from altwalker.loader import get_supported_loaders
 
 from . import walker
 from .__version__ import VERSION
-from .client import is_server_running
 from .server import start
+from .status import is_server_running
 
 CONTEXT_SETTINGS = dict(help_option_names=["--help", "-h"])
 
