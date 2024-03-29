@@ -414,7 +414,7 @@ async function connectToWebSocket() {
     ws.onmessage = (event) => handleWebSocketMessage(ws, JSON.parse(event.data));
   } catch(error) {
     hideLoadingStartButton();
-    showErrorMessage(`Unknown Error.`);
+    showErrorMessage(`Unknown Error. Please ensure that the WebSocket server is running and that both the server and client are using compatible versions.`);
   }
 }
 
