@@ -40,7 +40,7 @@ class SyncWebsocketReporter(Reporter):
         self.websocket.send(json.dumps({"type": "init", "client": "reporter"}))
         self.websocket.send(json.dumps({"type": "start", "models": self.models_json}))
 
-        click.secho(f">>> Waiting for viewer....", fg='green', bold=True)
+        click.secho(">>> Waiting for viewer....", fg='green', bold=True)
         data = self.websocket.recv()
         event = json.loads(data)
         assert event["type"] == "start"

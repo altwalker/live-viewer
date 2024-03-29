@@ -40,7 +40,7 @@ def health_check(websocket, request):
 
 
 def reporter_handler(websocket):
-    click.secho(f">>> Reporter connected.", fg='green', bold=True)
+    click.secho(">>> Reporter connected.", fg='green', bold=True)
 
     while CONNECTED["viewer"] is None:
         time.sleep(0.1)
@@ -53,7 +53,7 @@ def reporter_handler(websocket):
 
 
 def viewer_handler(websocket):
-    click.secho(f">>> Viewer connected.", fg='green', bold=True)
+    click.secho(">>> Viewer connected.", fg='green', bold=True)
 
     while CONNECTED["reporter"] is None:
         time.sleep(0.1)
