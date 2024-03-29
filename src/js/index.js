@@ -378,7 +378,7 @@ function saveSettings() {
 }
 
 // WebSocket Client
-function connectToWebSocket() {
+async function connectToWebSocket() {
   showLoadingStartButton();
 
   let port = document.getElementById("port-input").value;
@@ -392,6 +392,13 @@ function connectToWebSocket() {
   }
 
   try {
+    const response = await fetch(`http://localhost:${port}/healthz`);
+    if (!response.ok) {
+      hideLoadingStartButton();
+      showErrorMessage(`WebSocket server not running or incompatible versions. Please ensure that the WebSocket server is running and that both the server and client are using compatible versions.`);
+      return
+    }
+
     const ws = new WebSocket(`ws://localhost:${port}`);
 
     ws.onerror = (event) => {

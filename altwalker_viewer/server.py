@@ -13,11 +13,14 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+import http
 import json
 import logging
 import time
 
-from websockets.sync.server import serve
+import click
+from websockets.http11 import datastructures
+from websockets.sync.server import Response, serve
 
 from .__version__ import VERSION
 
@@ -29,7 +32,16 @@ CONNECTED = {
 }
 
 
+def health_check(websocket, request):
+    if request.path == "/healthz":
+        return Response(http.HTTPStatus.OK, "OK", datastructures.Headers([]), b"OK\n")
+    if request.path == "/versionz":
+        return Response(http.HTTPStatus.OK, "OK", datastructures.Headers([]), VERSION.encode())
+
+
 def reporter_handler(websocket):
+    click.secho(">>> Reporter connected.", fg='green', bold=True)
+
     while CONNECTED["viewer"] is None:
         time.sleep(0.1)
 
@@ -41,6 +53,8 @@ def reporter_handler(websocket):
 
 
 def viewer_handler(websocket):
+    click.secho(">>> Viewer connected.", fg='green', bold=True)
+
     while CONNECTED["reporter"] is None:
         time.sleep(0.1)
 
@@ -56,22 +70,24 @@ def status_handler(websocket):
 
 
 def handler(websocket):
-    print("Server started.")
+    # TODO: Remove after issue https://github.com/python-websockets/websockets/issues/1419 is fixed.
+    if websocket.request.path in ['/healthz', '/versionz']:
+        return
 
     message = websocket.recv()
     event = json.loads(message)
-    assert event["type"] == "init"
+
+    if event.get("type") != "init":
+        raise Exception(
+            "Incompatible version error: The server and client versions are incompatible. "
+            "Please ensure that both the server and client are using compatible versions."
+        )
 
     if not CONNECTED["reporter"] and event.get("client") == "reporter":
-        print("Reporter connected.")
-
-        print("")
         CONNECTED["reporter"] = websocket
         reporter_handler(websocket)
 
     if not CONNECTED["viewer"] and event.get("client") == "viewer":
-        print("Viewer connected.")
-
         CONNECTED["viewer"] = websocket
         viewer_handler(websocket)
 
@@ -82,8 +98,8 @@ def handler(websocket):
 
 
 def start(host="localhost", port=5555):
-    with serve(handler, host=host, port=port) as server:
-        print("Starting websocket server...")
+    with serve(handler, host=host, port=port, process_request=health_check) as server:
+        click.secho(f">>> Starting websocket server on port: {port}", fg='green', bold=True)
         server.serve_forever()
 
 

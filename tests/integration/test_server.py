@@ -2,9 +2,11 @@ import json
 import time
 
 import pytest
+import requests
 from altwalker_viewer.__version__ import VERSION
 from altwalker_viewer.cli import websocket_server
-from altwalker_viewer.client import get_server_status, is_server_running
+from altwalker_viewer.client import get_server_status
+from altwalker_viewer.status import is_server_running
 from websockets.sync.client import connect
 
 
@@ -15,6 +17,22 @@ def test_server():
             time.sleep(0.1)
 
         yield server_process
+
+
+def test_healthz_endpoint():
+    response = requests.get("http://localhost:5555/healthz")
+    assert response.status_code == 200
+    assert response.text == "OK\n"
+
+    response = requests.get("http://localhost:5555/healthz")
+    assert response.status_code == 200
+    assert response.text == "OK\n"
+
+
+def test_versionz_endpoint():
+    response = requests.get("http://localhost:5555/versionz")
+    assert response.status_code == 200
+    assert response.text == VERSION
 
 
 def test_status():
