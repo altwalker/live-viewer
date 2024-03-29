@@ -18,6 +18,7 @@ import json
 import logging
 import time
 
+import click
 from websockets.http11 import datastructures
 from websockets.sync.server import Response, serve
 
@@ -39,6 +40,8 @@ def health_check(websocket, request):
 
 
 def reporter_handler(websocket):
+    click.secho(f">>> Reporter connected.", fg='green', bold=True)
+
     while CONNECTED["viewer"] is None:
         time.sleep(0.1)
 
@@ -50,6 +53,8 @@ def reporter_handler(websocket):
 
 
 def viewer_handler(websocket):
+    click.secho(f">>> Viewer connected.", fg='green', bold=True)
+
     while CONNECTED["reporter"] is None:
         time.sleep(0.1)
 
@@ -65,22 +70,24 @@ def status_handler(websocket):
 
 
 def handler(websocket):
-    print("Server started.")
+    # TODO: Remove after issue https://github.com/python-websockets/websockets/issues/1419 is fixed.
+    if websocket.request.path in ['/healthz', '/versionz']:
+        return
 
     message = websocket.recv()
     event = json.loads(message)
-    assert event["type"] == "init"
+
+    if event.get("type") != "init":
+        raise Exception(
+            "Incompatible version error: The server and client versions are incompatible. "
+            "Please ensure that both the server and client are using compatible versions."
+        )
 
     if not CONNECTED["reporter"] and event.get("client") == "reporter":
-        print("Reporter connected.")
-
-        print("")
         CONNECTED["reporter"] = websocket
         reporter_handler(websocket)
 
     if not CONNECTED["viewer"] and event.get("client") == "viewer":
-        print("Viewer connected.")
-
         CONNECTED["viewer"] = websocket
         viewer_handler(websocket)
 
@@ -92,7 +99,7 @@ def handler(websocket):
 
 def start(host="localhost", port=5555):
     with serve(handler, host=host, port=port, process_request=health_check) as server:
-        print("Starting websocket server...")
+        click.secho(f">>> Starting websocket server on port: {port}", fg='green', bold=True)
         server.serve_forever()
 
 

@@ -16,6 +16,7 @@
 import datetime
 import json
 
+import click
 from altwalker.reporter import Reporter
 from websockets.sync.client import connect
 
@@ -39,7 +40,7 @@ class SyncWebsocketReporter(Reporter):
         self.websocket.send(json.dumps({"type": "init", "client": "reporter"}))
         self.websocket.send(json.dumps({"type": "start", "models": self.models_json}))
 
-        print("Waiting for viewer....")
+        click.secho(f">>> Waiting for viewer....", fg='green', bold=True)
         data = self.websocket.recv()
         event = json.loads(data)
         assert event["type"] == "start"
