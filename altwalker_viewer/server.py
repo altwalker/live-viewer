@@ -34,9 +34,9 @@ CONNECTED = {
 
 def health_check(websocket, request):
     if request.path == "/healthz":
-        return Response(http.HTTPStatus.OK, "OK", datastructures.Headers([]), b"OK\n")
+        return Response(http.HTTPStatus.OK, "OK", datastructures.Headers([('Access-Control-Allow-Origin', '*')]), b"OK\n")
     if request.path == "/versionz":
-        return Response(http.HTTPStatus.OK, "OK", datastructures.Headers([]), VERSION.encode())
+        return Response(http.HTTPStatus.OK, "OK", datastructures.Headers([('Access-Control-Allow-Origin', '*')]), VERSION.encode())
 
 
 def reporter_handler(websocket):
