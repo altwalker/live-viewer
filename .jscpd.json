@@ -1,6 +1,6 @@
 {
   "threshold": 0,
   "reporters": ["consoleFull"],
-  "ignore": ["**/__snapshots__/**", "**/node_modules/**", "src/index.html"],
+  "ignore": ["**/__snapshots__/**", "**/node_modules/**", "**/src/index.html"],
   "absolute": true
 }
