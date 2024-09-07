@@ -16,77 +16,77 @@
 */
 
 .h-full {
-    height: calc(100vh - .6750rem - 1rem - 30px);
+  height: calc(100vh - 0.675rem - 1rem - 30px);
 }
 
 input:focus,
 textarea:focus,
 select:focus {
-    border-color: #18AD38 !important;
-    box-shadow: none !important;
+  border-color: #18ad38 !important;
+  box-shadow: none !important;
 }
 
 #error-form input:focus,
 #error-form textarea:focus {
-    border-color: #dc3545 !important;
-    box-shadow: none !important;
+  border-color: #dc3545 !important;
+  box-shadow: none !important;
 }
 
 #error-form input,
 #error-form textarea {
-    color: #dc3545 !important;
+  color: #dc3545 !important;
 }
 
 #current-step-form input,
 #current-step-form textarea,
 #output-form textarea {
-    color: #18AD38 !important;
+  color: #18ad38 !important;
 }
 
 #statistics-status,
 #statistics-vertex-coverage,
 #statistics-edge-coverage {
-    font-size: 1em;
+  font-size: 1em;
 }
 
 .nav-icon {
-    stroke: #18AD38 !important;
+  stroke: #18ad38 !important;
 }
 
 .cursor-pointer {
-    cursor: pointer !important;
+  cursor: pointer !important;
 }
 
 .bg-transparent-black {
-    background-color: rgba(0, 0, 0, 0.85);
+  background-color: rgba(0, 0, 0, 0.85);
 }
 
 .z-index-3 {
-    z-index: 3;
+  z-index: 3;
 }
 
 .overflow-y-scroll {
-    overflow-y: scroll;
+  overflow-y: scroll;
 }
 
 .btn-primary {
-    border-color: #18AD38 !important;
-    background-color: #18AD38 !important;
+  border-color: #18ad38 !important;
+  background-color: #18ad38 !important;
 }
 
 /* Resizable containers  */
 
 #left {
-    width: calc(70% - 0.025%);
+  width: calc(70% - 0.025%);
 }
 
 #right {
-    width: calc(30% - 0.025%);
+  width: calc(30% - 0.025%);
 }
 
 #drag-bar {
-    width: 0.05%;
-    cursor: col-resize;
+  width: 0.05%;
+  cursor: col-resize;
 
-    background-color: #dee2e6;
+  background-color: #dee2e6;
 }

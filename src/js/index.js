@@ -16,22 +16,25 @@
 */
 
 // Models
-const visualizer = new ModelVisualizer({container: "visualizer", editMode: false});;
+const visualizer = new ModelVisualizer({
+  container: "visualizer",
+  editMode: false,
+});
 
 const scale = d3.scaleLinear().range([0.3, 0.8]).domain([0, 5]).clamp(true);
-const getColor = (d) => d3.interpolateYlGn(scale(d))
+const getColor = (d) => d3.interpolateYlGn(scale(d));
 
 var oldStepId = null;
-var stepCount = {}
-var failedStep = {}
+var stepCount = {};
+var failedStep = {};
 
 function displayModels(models) {
   visualizer.setModels(models);
   visualizer.repaint();
   repaintEdges();
 
-  failedStep = {}
-  stepCount = {}
+  failedStep = {};
+  stepCount = {};
 }
 
 function setGraphLayoutOptions(options) {
@@ -39,8 +42,8 @@ function setGraphLayoutOptions(options) {
     "Top-Bottom": "TB",
     "Bottom-Top": "BT",
     "Left-Right": "LR",
-    "Right-Left": "RL"
-  }
+    "Right-Left": "RL",
+  };
 
   const layoutOptions = {
     rankdir: graphDirectionsMap[options.graphDirection],
@@ -92,8 +95,7 @@ function drawStep(id, current) {
     .style("fill", getColor(stepCount[id]))
     .style("stroke", getColor(stepCount[id]));
 
-  d3.select(`svg g#${id} path`)
-    .style("stroke", getColor(stepCount[id]))
+  d3.select(`svg g#${id} path`).style("stroke", getColor(stepCount[id]));
 
   if (current) {
     d3.select(`svg g#${id}`)
@@ -101,7 +103,9 @@ function drawStep(id, current) {
       .classed("current-edge", true);
 
     // Bold edges labels
-    d3.selectAll("svg .edgeLabels tspan").attr("class", (d) => d.name == id ? "current-label" : "");
+    d3.selectAll("svg .edgeLabels tspan").attr("class", (d) =>
+      d.name == id ? "current-label" : "",
+    );
   }
 }
 
@@ -118,12 +122,11 @@ function updateFailedStep(step) {
     .style("fill", "#c0392b")
     .style("stroke", "#c0392b");
 
-  d3.select(`svg g#${step.id} path`)
-    .style("stroke", "#c0392b")
+  d3.select(`svg g#${step.id} path`).style("stroke", "#c0392b");
 }
 
-window.addEventListener("resize", function() {
-  repaintGraph()
+window.addEventListener("resize", function () {
+  repaintGraph();
 });
 
 // Create the drag bar
@@ -240,7 +243,9 @@ function hidePortError() {
 }
 
 function showCurrentStepForm() {
-  document.getElementById("current-step-form").classList.remove(CSS_CLASSES.HIDE);
+  document
+    .getElementById("current-step-form")
+    .classList.remove(CSS_CLASSES.HIDE);
 }
 
 function hideCurrentStepForm() {
@@ -279,7 +284,11 @@ function updateStepStart(step) {
   document.getElementById("model-input").value = step.modelName;
 
   if (step.data) {
-    document.getElementById("data-input").value = JSON.stringify(step.data, null, '  ');
+    document.getElementById("data-input").value = JSON.stringify(
+      step.data,
+      null,
+      "  ",
+    );
   }
 }
 
@@ -302,37 +311,68 @@ function updateStepEnd(result) {
 }
 
 function updateStatus(status) {
-  let statusElement = document.getElementById("statistics-status")
+  let statusElement = document.getElementById("statistics-status");
   statusElement.innerText = status ? "Passed" : "Failed";
-  statusElement.classList.add(CSS_CLASSES.BADGE)
-  statusElement.classList.add(status ? CSS_CLASSES.BADGE_SUCCESS : CSS_CLASSES.BADGE_DANGER);
-  statusElement.classList.remove(status ? CSS_CLASSES.BADGE_DANGER : CSS_CLASSES.BADGE_SUCCESS);
+  statusElement.classList.add(CSS_CLASSES.BADGE);
+  statusElement.classList.add(
+    status ? CSS_CLASSES.BADGE_SUCCESS : CSS_CLASSES.BADGE_DANGER,
+  );
+  statusElement.classList.remove(
+    status ? CSS_CLASSES.BADGE_DANGER : CSS_CLASSES.BADGE_SUCCESS,
+  );
 }
 
 function updateStatistics(statistics) {
-  document.getElementById("statistics-number-of-models").innerText = statistics.totalNumberOfModels;
-  document.getElementById("statistics-completed-models").innerText = statistics.totalCompletedNumberOfModels;
-  document.getElementById("statistics-failed-models").innerText = statistics.totalFailedNumberOfModels;
-  document.getElementById("statistics-incomplete-models").innerText = statistics.totalIncompleteNumberOfModels;
-  document.getElementById("statistics-not-executed-models").innerText = statistics.totalNotExecutedNumberOfModels;
+  document.getElementById("statistics-number-of-models").innerText =
+    statistics.totalNumberOfModels;
+  document.getElementById("statistics-completed-models").innerText =
+    statistics.totalCompletedNumberOfModels;
+  document.getElementById("statistics-failed-models").innerText =
+    statistics.totalFailedNumberOfModels;
+  document.getElementById("statistics-incomplete-models").innerText =
+    statistics.totalIncompleteNumberOfModels;
+  document.getElementById("statistics-not-executed-models").innerText =
+    statistics.totalNotExecutedNumberOfModels;
 
   let edgeCoverage = document.getElementById("statistics-edge-coverage");
   edgeCoverage.innerText = `${statistics.edgeCoverage}%`;
-  edgeCoverage.classList.remove(...[CSS_CLASSES.BADGE_DANGER, CSS_CLASSES.BADGE_WARNING, CSS_CLASSES.BADGE_SUCCESS]);
-  edgeCoverage.classList.add(...[CSS_CLASSES.BADGE, getPercentageClass(statistics.edgeCoverage)]);
+  edgeCoverage.classList.remove(
+    ...[
+      CSS_CLASSES.BADGE_DANGER,
+      CSS_CLASSES.BADGE_WARNING,
+      CSS_CLASSES.BADGE_SUCCESS,
+    ],
+  );
+  edgeCoverage.classList.add(
+    ...[CSS_CLASSES.BADGE, getPercentageClass(statistics.edgeCoverage)],
+  );
 
-  document.getElementById("statistics-number-of-edges").innerText = statistics.totalNumberOfEdges;
-  document.getElementById("statistics-visited-edges").innerText = statistics.totalNumberOfVisitedEdges;
-  document.getElementById("statistics-unvisited-edges").innerText = statistics.totalNumberOfUnvisitedEdges;
+  document.getElementById("statistics-number-of-edges").innerText =
+    statistics.totalNumberOfEdges;
+  document.getElementById("statistics-visited-edges").innerText =
+    statistics.totalNumberOfVisitedEdges;
+  document.getElementById("statistics-unvisited-edges").innerText =
+    statistics.totalNumberOfUnvisitedEdges;
 
   let vertexCoverage = document.getElementById("statistics-vertex-coverage");
   vertexCoverage.innerText = `${statistics.vertexCoverage}%`;
-  vertexCoverage.classList.remove(...[CSS_CLASSES.BADGE_DANGER, CSS_CLASSES.BADGE_WARNING, CSS_CLASSES.BADGE_SUCCESS]);
-  vertexCoverage.classList.add(...[CSS_CLASSES.BADGE, getPercentageClass(statistics.vertexCoverage)]);
+  vertexCoverage.classList.remove(
+    ...[
+      CSS_CLASSES.BADGE_DANGER,
+      CSS_CLASSES.BADGE_WARNING,
+      CSS_CLASSES.BADGE_SUCCESS,
+    ],
+  );
+  vertexCoverage.classList.add(
+    ...[CSS_CLASSES.BADGE, getPercentageClass(statistics.vertexCoverage)],
+  );
 
-  document.getElementById("statistics-number-of-vertices").innerText = statistics.totalNumberOfVertices;
-  document.getElementById("statistics-visited-vertices").innerText = statistics.totalNumberOfVisitedVertices;
-  document.getElementById("statistics-unvisited-vertices").innerText = statistics.totalNumberOfUnvisitedVertices;
+  document.getElementById("statistics-number-of-vertices").innerText =
+    statistics.totalNumberOfVertices;
+  document.getElementById("statistics-visited-vertices").innerText =
+    statistics.totalNumberOfVisitedVertices;
+  document.getElementById("statistics-unvisited-vertices").innerText =
+    statistics.totalNumberOfUnvisitedVertices;
 }
 
 function showStopButton() {
@@ -363,15 +403,17 @@ function resetOutput() {
 
 function saveSettings() {
   const graphDirection = document.getElementById("graph-direction-input").value;
-  const vertexSeparation = document.getElementById("vertex-separation-input").value;
+  const vertexSeparation = document.getElementById(
+    "vertex-separation-input",
+  ).value;
   const edgeSeparation = document.getElementById("edge-separation-input").value;
   const rankSeparation = document.getElementById("rank-separation-input").value;
 
   setGraphLayoutOptions({
-    "graphDirection": graphDirection,
-    "vertexSeparation": vertexSeparation == 0 ? 50 : vertexSeparation,
-    "edgeSeparation": edgeSeparation == 0 ? 50 : edgeSeparation,
-    "rankSeparation": rankSeparation == 0 ? 50 : rankSeparation,
+    graphDirection: graphDirection,
+    vertexSeparation: vertexSeparation == 0 ? 50 : vertexSeparation,
+    edgeSeparation: edgeSeparation == 0 ? 50 : edgeSeparation,
+    rankSeparation: rankSeparation == 0 ? 50 : rankSeparation,
   });
 
   hideSettingsOverlay();
@@ -395,8 +437,10 @@ async function connectToWebSocket() {
     const response = await fetch(`http://localhost:${port}/healthz`);
     if (!response.ok) {
       hideLoadingStartButton();
-      showErrorMessage(`WebSocket server not running or incompatible versions. Please ensure that the WebSocket server is running and that both the server and client are using compatible versions.`);
-      return
+      showErrorMessage(
+        `WebSocket server not running or incompatible versions. Please ensure that the WebSocket server is running and that both the server and client are using compatible versions.`,
+      );
+      return;
     }
 
     const ws = new WebSocket(`ws://localhost:${port}`);
@@ -404,15 +448,18 @@ async function connectToWebSocket() {
     ws.onerror = (event) => {
       console.log("WebSocketError:", event);
       showSetupOverlay();
-      showErrorMessage(`Could not connect to port: ${port}. Make sure the websocket server is running on the selected port.`);
+      showErrorMessage(
+        `Could not connect to port: ${port}. Make sure the websocket server is running on the selected port.`,
+      );
     };
     ws.onopen = () => {
-      ws.send(JSON.stringify({"type": "init", "client": "viewer"}));
-      ws.send(JSON.stringify({"type": "start"}));
+      ws.send(JSON.stringify({ type: "init", client: "viewer" }));
+      ws.send(JSON.stringify({ type: "start" }));
     };
     ws.onclose = () => hideLoadingStartButton();
-    ws.onmessage = (event) => handleWebSocketMessage(ws, JSON.parse(event.data));
-  } catch(error) {
+    ws.onmessage = (event) =>
+      handleWebSocketMessage(ws, JSON.parse(event.data));
+  } catch (error) {
     hideLoadingStartButton();
     showErrorMessage(`Unknown Error.`);
   }
@@ -422,8 +469,8 @@ const MESSAGE_TYPES = {
   START: "start",
   END: "end",
   STEP_START: "step-start",
-  STEP_END: "step-end"
-}
+  STEP_END: "step-end",
+};
 
 function handleWebSocketMessage(ws, message) {
   const type = message.type;
@@ -462,10 +509,18 @@ function handleWebSocketMessage(ws, message) {
   }
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   document.getElementById("stop-run-button").addEventListener("click", stopRun);
-  document.getElementById("settings-button").addEventListener("click", showSettingsOverlay);
-  document.getElementById("save-settings-button").addEventListener("click", saveSettings);
-  document.getElementById("hide-settings-button").addEventListener("click", hideSettingsOverlay);
-  document.getElementById("connect-button").addEventListener("click", connectToWebSocket);
+  document
+    .getElementById("settings-button")
+    .addEventListener("click", showSettingsOverlay);
+  document
+    .getElementById("save-settings-button")
+    .addEventListener("click", saveSettings);
+  document
+    .getElementById("hide-settings-button")
+    .addEventListener("click", hideSettingsOverlay);
+  document
+    .getElementById("connect-button")
+    .addEventListener("click", connectToWebSocket);
 });

@@ -33,8 +33,8 @@ altwalker-viewer, version 0.4s.0
 
 To use `altwalker-viewer`, you'll need the following prerequisites:
 
-* Test model(s)
-* Test code for the model(s)
+- Test model(s)
+- Test code for the model(s)
 
 If you can run your tests using `altwalker online`, you already have everything you need for the LiveViewer.
 
@@ -76,8 +76,8 @@ If you encounter any issues while using the LiveViewer, consider the following s
 
 1. **Check Model and Code Validity**: First, ensure that your models and code are valid by using the following commands:
 
-    * `altwalker check` for the model(s)
-    * `altwalker verify` for code
+   - `altwalker check` for the model(s)
+   - `altwalker verify` for code
 
 1. **Terminating GraphWalker Processes**: If you experience problems when running the `altwalker-viewer online` command, it's essential to check for any existing GraphWalker processes. If any GraphWalker processes are running, you should stop them before running the `altwalker-viewer online` command.
 
@@ -85,7 +85,7 @@ If you encounter any issues while using the LiveViewer, consider the following s
 
 ### Getting help on commands and option names
 
-* `-h`, `--help`: Show a help message and exit.
+- `-h`, `--help`: Show a help message and exit.
 
 ```bash
 altwalker-viewer --help
@@ -101,9 +101,9 @@ altwalker-viewer open --help
 
 ## Development Setup
 
-* python3
-* node
-* npm
+- python3
+- node
+- npm
 
 ### Install npm dependencies
 
@@ -137,12 +137,12 @@ pip install -e .
 
 For help, discussion about best practices, sharing ideas, projects, or any other conversation that benefits from being searchable:
 
-* [Discuss AltWalker on GitHub](https://github.com/orgs/altwalker/discussions)
-* [Google Group](https://groups.google.com/g/altwalker)
+- [Discuss AltWalker on GitHub](https://github.com/orgs/altwalker/discussions)
+- [Google Group](https://groups.google.com/g/altwalker)
 
 For casual chit-chat with us or with other members of the community:
 
-* [Gitter Chat Room](https://groups.google.com/g/altwalker)
+- [Gitter Chat Room](https://groups.google.com/g/altwalker)
 
 ## License
 
