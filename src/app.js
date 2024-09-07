@@ -15,19 +15,22 @@
     along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-require('./css/models.css');
-require('./css/style.css');
+require("./css/models.css");
+require("./css/style.css");
 
-require('./js/index.js');
+require("./js/index.js");
 
-console.log("AltTester\'s Live Viewer v" + VERSION)
+console.log("AltTester's Live Viewer v" + VERSION);
 
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./service-worker.js').then(registration => {
-      console.log('SW registered: ', registration);
-    }).catch(registrationError => {
-      console.log('SW registration failed: ', registrationError);
-    });
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("./service-worker.js")
+      .then((registration) => {
+        console.log("SW registered: ", registration);
+      })
+      .catch((registrationError) => {
+        console.log("SW registration failed: ", registrationError);
+      });
   });
 }

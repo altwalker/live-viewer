@@ -6,7 +6,7 @@ permissions: read-all
 
 jobs:
   build:
-    runs-on: 'ubuntu-latest'
+    runs-on: "ubuntu-latest"
 
     steps:
       - uses: actions/checkout@v4
@@ -31,7 +31,7 @@ jobs:
 
   deploy:
     needs: build
-    runs-on: 'ubuntu-latest'
+    runs-on: "ubuntu-latest"
 
     if: github.ref == 'refs/heads/main'
 

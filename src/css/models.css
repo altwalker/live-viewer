@@ -20,53 +20,53 @@
 .mv-visualizer .node > rect,
 .mv-visualizer .node-fake > rect,
 .mv-visualizer .node-blocked > rect {
-    fill: #7f8c8d;
-    stroke: #7f8c8d;
-    rx: 1;
-    ry: 1;
+  fill: #7f8c8d;
+  stroke: #7f8c8d;
+  rx: 1;
+  ry: 1;
 }
 
 .mv-visualizer .node-label {
-    fill: #ecf0f1;
-    font-size: 1.2em;
-    font-weight: 400;
+  fill: #ecf0f1;
+  font-size: 1.2em;
+  font-weight: 400;
 }
 
 .mv-visualizer .node-start > rect {
-    fill: #1b9e77;
-    stroke: #1b9e77;
+  fill: #1b9e77;
+  stroke: #1b9e77;
 }
 
 .mv-visualizer .node-fake {
-    fill: #ecf0f1;
+  fill: #ecf0f1;
 }
 
 .mv-visualizer .node-blocked {
-    font-weight: 400;
+  font-weight: 400;
 }
 
 /* Edges */
 
 .mv-visualizer .edgeLabels {
-    font-size: 1.2em;
-    font-weight: 400;
+  font-size: 1.2em;
+  font-weight: 400;
 }
 
 .mv-visualizer .edgePath path {
-    stroke: #999;
-    fill: #999;
-    stroke-width: 2.5px;
+  stroke: #999;
+  fill: #999;
+  stroke-width: 2.5px;
 }
 
 /* Current Element */
 
 .current-node rect {
-    stroke: #34495e !important;
-    stroke-width: 1px !important;
+  stroke: #34495e !important;
+  stroke-width: 1px !important;
 }
 
 .current-node text {
-    font-weight: 500 !important;
+  font-weight: 500 !important;
 }
 
 /* .current-edge path {
@@ -74,5 +74,5 @@
 } */
 
 .current-label {
-    font-weight: 600 !important;
+  font-weight: 600 !important;
 }
